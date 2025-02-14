@@ -1,92 +1,12 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-    <title>{% block title %}{% endblock %}</title>
+{% extends "ort_base.html" %}
 
-    <head>
-        <meta charset="UTF-8" />
-        <title>ORT报告工作站</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
-    </head>
+{% block content %}
+<div style="width: 100%; grid-column: 1/4">
+    <h2>欢迎</h2>
+    <p>2025年5月1日，ORT报告工作站正式上线，欢迎各位ORT专业人员使用。</p>
+</div>
+{% endblock content %}
 
-    <body>
-        <header>
-            <h1>ORT报告工作站</h1>
-            <div>
-                <p>ORT报告工作站，为您提供报告、审查、反馈等服务。</p>
-            </div>
-        </header>
-        <main>
-            <nav>
-                <ul>
-                    <hr />
-                    <li>
-                        <div>
-                            <a class="head" id="head_plan"><img src="{{ url_for('static', filename='icon/jihua.svg') }}" alt="计划" /><span>计划</span></a>
-                            <a href="{{ url_for('ort', page_name='paicheng') }}" class="show"><img src="{{ url_for('static', filename='icon/paicheng.svg') }}" alt="排程" /><span>排程</span></a>
-                            <a href="{{ url_for('ort', page_name='lingtui') }}" class="show"><img src="{{ url_for('static', filename='icon/icn_wuzilingtuiliaochaxun.svg') }}" alt="领退" /><span>领退</span></a>
-                        </div>
-                    </li>
-                    <hr />
-                    <li>
-                        <div>
-                            <a class="head" id="report"><img src="{{ url_for('static', filename='icon/baogao.svg') }}" alt="报告" /><span>报告</span></a>
-                            <a href="{{ url_for('ort', page_name='EMI168') }}" class="show"><img src="{{ url_for('static', filename='icon/a-mxburn.svg') }}" alt="EMI@168" /><span>EMI&amp;168</span></a>
-                            <a href="{{ url_for('ort', page_name='amz') }}" class="show"><img src="{{ url_for('static', filename='icon/amz.svg') }}" alt="AMZ" /><span>AMZ</span></a>
-                        </div>
-                    </li>
-                    <hr />
-                    <li>
-                        <a class="head" href="{{ url_for('ort', page_name='check') }}"><img src="{{ url_for('static', filename='icon/sousuo_1.svg') }}" alt="审查" /><span>审查</span></a>
-                    </li>
-                    <hr />
-                    <li>
-                        <a class="head" href="{{ url_for('ort', page_name='feedback') }}"><img src="{{ url_for('static', filename='icon/fankui_1.svg') }}" alt="反馈" /><span>反馈</span></a>
-                    </li>
-                    <hr />
-                    <li>
-                        <a class="head" href="{{ url_for('ort', page_name='help') }}"><img src="{{ url_for('static', filename='icon/bangzhu_3.svg') }}" alt="帮助" /><span>帮助</span></a>
-                    </li>
-                    <hr />
-                </ul>
-            </nav>
-            <div class="container" id="container">
-                <div style="width: 100%; grid-column: 1/4">
-                    <h2>欢迎</h2>
-                    <p>2025年5月1日，ORT报告工作站正式上线，欢迎各位ORT专业人员使用。</p>
-                </div>
-                {% if page_name == 'paicheng' or page_name == 'index' %}
-                <div class="cal-container">
-                    <link rel="stylesheet" href="{{ url_for('static', filename='css/cal.css') }}" />
-                    <div class="year-month">
-                        <div>
-                            <span id="month"></span>
-                            <span id="year"></span>
-                        </div>
-                        <div class="pre" id="pre-month">&lt;</div>
-                        <div class="next" id="next-month">&gt;</div>
-                    </div>
-                    <div class="weeks">
-                        <ul>
-                            <li>日</li>
-                            <li>一</li>
-                            <li>二</li>
-                            <li>三</li>
-                            <li>四</li>
-                            <li>五</li>
-                            <li>六</li>
-                        </ul>
-                    </div>
-                    <div class="days">
-                        <ul id="day"></ul>
-                    </div>
-                    <script src="{{ url_for('static', filename='js/cal.js') }}"></script>
-                </div>
-                {% endif %}
-            </div>
-        </main>
-        <footer>
-            <p>版权所有 © 2025 ORT报告工作站</p>
-        </footer>
-        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-    </body>
-</html>
+{% block cal %}
+{% include "calendar.html" %}
+{% endblock cal %}

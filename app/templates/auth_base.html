@@ -5,11 +5,11 @@
     <h1>ORT</h1>
     <ul>
         {% if g.user %}
-            <li><span>{{ g.user['username'] }}</span></li>
-            <li><a href="{{ url_for('auth.logout') }}">登出</a></li>
+        <li><span>{{ g.user['username'] }}</span></li>
+        <li><a href="{{ url_for('auth.logout') }}">登出</a></li>
         {% else %}
-            <li><a href="{{ url_for('auth.register') }}">註冊</a></li>
-            <li><a href="{{ url_for('auth.login') }}">登錄</a></li>
+        <li><a href="{{ url_for('auth.register') }}">注册</a></li>
+        <li><a href="{{ url_for('auth.login') }}">登录</a></li>
         {% endif %}
     </ul>
 </nav>

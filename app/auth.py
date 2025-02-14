@@ -59,7 +59,7 @@ def login():
             return redirect(url_for('index'))
             
         flash(error)
-    return render_template('auth/register.html')
+    return render_template('auth/login.html')
 
 @bp.before_app_request
 def load_logged_inuser():

@@ -20,7 +20,7 @@ def create_app(test_config=None):
     
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('index.html', title="首页")
 
     @app.route('/ort/<string:page_name>')
     def ort(page_name):
