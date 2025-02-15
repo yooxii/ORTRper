@@ -3,33 +3,33 @@ import sqlite3
 import click
 from flask import current_app, g
 
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(
+def get_ort_db():
+    if 'ortdb' not in g:
+        g.ortdb = sqlite3.connect(
             database=current_app.config['ORT_DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES    
         )
-        g.db.row_factory = sqlite3.Row
+        g.ortdb.row_factory = sqlite3.Row
         
-        return g.db
+        return g.ortdb
     
 def close_db(e=None):
-    db = g.pop('db', None)
+    ortdb = g.pop('ortdb', None)
     
-    if db is not None:
-        db.close
+    if ortdb is not None:
+        ortdb.close
 
-def init_db():
-    db = get_db()
+def init_ort_db():
+    ortdb = get_ort_db()
     
     with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf-8'))
+        ortdb.executescript(f.read().decode('utf-8'))
         
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
         
-@click.command('init-db')
+@click.command('init-ort-db')
 def init_db_command():
-    init_db()
-    click.echo('Initialized the database.')
+    init_ort_db()
+    click.echo('Initialized the ORT database.')

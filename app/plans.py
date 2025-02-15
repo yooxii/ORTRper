@@ -1,13 +1,12 @@
 import functools
 import pandas as pd
-import numpy as np
 import openpyxl as xl
 
 from flask import (
     current_app, Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.db import get_db
+from app.db import get_ort_db
 
 
 bp= Blueprint('plans', __name__, url_prefix='/plans')

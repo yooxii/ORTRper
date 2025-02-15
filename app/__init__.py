@@ -6,6 +6,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         ORT_DATABASE=os.path.join(app.instance_path, 'ort.sqlite'),
+        PLANS_DATABASE=os.path.join(app.instance_path, 'plans.sqlite'),
         ORT_SCHEDULE=os.path.join(app.instance_path, 'Y2025 ORT Test Schedule.xlsx')
     )
     

@@ -4,7 +4,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.db import get_db
+from app.db import get_ort_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -13,7 +13,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+        db = get_ort_db()
         error = None
         
         if not username:
@@ -41,7 +41,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
+        db = get_ort_db()
         error = None
         
         user = db.execute(
@@ -68,7 +68,7 @@ def load_logged_inuser():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
+        g.user = get_ort_db().execute(
             'select * from user where id = ?', (user_id,)
         ).fetchone()
         
