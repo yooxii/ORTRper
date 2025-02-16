@@ -19,7 +19,7 @@ ul li {
 .cal-container {
     display: flex;
     flex-direction: column;
-    position: sticky;
+    position: block;
     grid-column: 4;
     top: 0;
     width: 320px;

@@ -1,65 +1,77 @@
 DROP TABLE IF EXISTS `Schedule`;
 
-DROP TABLE IF EXISTS `Test Items`;
+DROP TABLE IF EXISTS `TestItems`;
 
-DROP TABLE IF EXISTS `Cust`.` Code`;
+DROP TABLE IF EXISTS `CustCode`;
 
-DROP TABLE IF EXISTS `Product Type`;
+DROP TABLE IF EXISTS `ProductType`;
+
+DROP TABLE IF EXISTS `Claims`;
 
 CREATE TABLE
     `Schedule` (
-        `Job No` BIGINT NOT NULL,
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `JobNo` INTEGER NOT NULL,
         `QRT` BOOLEAN NOT NULL,
         `Product` VARCHAR(15) NULL,
         `Customer` VARCHAR(20) NULL,
-        `Part No` VARCHAR(15) NOT NULL,
+        `PartNo` VARCHAR(15) NOT NULL,
         `Stage` VARCHAR(5) NOT NULL,
-        `Test Item` VARCHAR(50) NOT NULL,
-        `Sample Size` INT NOT NULL,
-        `Test Period` INT NOT NULL,
+        `TestItem` VARCHAR(50) NOT NULL,
+        `SampleSize` INTEGER NOT NULL,
+        `TestPeriod` INTEGER NOT NULL,
         `Owner` VARCHAR(50) NOT NULL,
-        `Start Date` DATE NOT NULL,
-        `End Date` DATE NOT NULL,
+        `StartDate` DATE NOT NULL,
+        `EndDate` DATE NOT NULL,
         `Status` VARCHAR(10) NOT NULL,
-        `Upload e-lab` BOOLEAN NULL,
+        `Upload_e-lab` BOOLEAN NULL,
         `Remark` TEXT NULL,
-        PRIMARY KEY (`Job No`)
-    ) CHARSET = utf8mb4;
-
-ALTER TABLE `Schedule` ADD PRIMARY KEY (`Job No`);
+        FOREIGN KEY (`Product`) REFERENCES `ProductType` (`Type`),
+        FOREIGN KEY (`PartNo`) REFERENCES `Claims` (`PartNo`)
+    );
 
 CREATE TABLE
-    `Test Items` (
-        `No`.`` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `Test Item` VARCHAR(50) NOT NULL,
-        `Test Period` INT NOT NULL,
+    `TestItems` (
+        `No` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `TestItem` VARCHAR(50) NOT NULL,
+        `TestPeriod` INTEGER NOT NULL,
         `Owner` VARCHAR(50) NOT NULL,
         `Dispose` VARCHAR(20) NOT NULL,
-        `Remark` TEXT NULL
-    ) CHARSET = utf8mb4;
+        `Remark` TEXT NULL,
+        FOREIGN KEY (`TestPeriod`) REFERENCES `Schedule` (`TestPeriod`),
+        FOREIGN KEY (`Owner`) REFERENCES `Schedule` (`Owner`),
+        FOREIGN KEY (`TestItem`) REFERENCES `Schedule` (`TestItem`)
+    );
 
 CREATE TABLE
-    `Cust`.` Code` (
-        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `CustCode` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `Code` VARCHAR(5) NOT NULL,
         `Customer` VARCHAR(20) NOT NULL,
         `product_type` VARCHAR(15) NOT NULL,
-        `full_product_type` VARCHAR(25) NOT NULL
-    ) CHARSET = utf8mb4;
+        `full_product_type` VARCHAR(25) NOT NULL,
+        FOREIGN KEY (`Customer`) REFERENCES `Schedule` (`Customer`)
+    );
 
 CREATE TABLE
-    `Product Type` (
-        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `ProductType` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `Code` VARCHAR(5) NOT NULL,
         `Type` VARCHAR(15) NOT NULL
-    ) CHARSET = utf8mb4;
+    );
 
-ALTER TABLE `Test Items` ADD CONSTRAINT `test items_test period_foreign` FOREIGN KEY (`Test Period`) REFERENCES `Schedule` (`Test Period`);
-
-ALTER TABLE `Cust`.` Code` ADD CONSTRAINT `cust_ code_endcustomer_foreign` FOREIGN KEY (`Customer`) REFERENCES `Schedule` (`Customer`);
-
-ALTER TABLE `Schedule` ADD CONSTRAINT `schedule_product_foreign` FOREIGN KEY (`Product`) REFERENCES `Product Type` (`Type`);
-
-ALTER TABLE `Test Items` ADD CONSTRAINT `test items_owner_foreign` FOREIGN KEY (`Owner`) REFERENCES `Schedule` (`Owner`);
-
-ALTER TABLE `Test Items` ADD CONSTRAINT `test items_test item_foreign` FOREIGN KEY (`Test Item`) REFERENCES `Schedule` (`Test Item`);
+CREATE TABLE
+    `Claims` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `claim_date` DATE NOT NULL,
+        `claim_no` VARCHAR(20) UNIQUE  NOT NULL,
+        `PartNo` VARCHAR(15) NOT NULL,
+        `claim_qty` DECIMAL(10, 2) NOT NULL,
+        `TestItem` VARCHAR(50) NULL,
+        `SN` TEXT NOT NULL,
+        `DC` VARCHAR(8) NOT NULL,
+        `REV` VARCHAR(10) NOT NULL,
+        `Work_Order` VARCHAR(40) NOT NULL,
+        `claim_status` VARCHAR(20) NULL,
+        `Remarks` TEXT NULL
+    );

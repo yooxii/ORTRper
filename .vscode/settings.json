@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "palns",
+            "database": "${workspaceFolder:ORTRper}/instance/plans.sqlite"
+        },
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "ort",
+            "database": "${workspaceFolder:ORTRper}/instance/ort.sqlite"
+        }
+    ]
+}

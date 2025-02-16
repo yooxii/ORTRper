@@ -1,0 +1,83 @@
+{% extends "ort_base.html" %}
+
+{% block header %}
+<h1>领用</h1>
+{% endblock header %}
+
+{% block content %}
+<div class="peek">
+    <form method="post">
+        <h3>记录领用信息</h3>
+        <table name="claims_peek", title="记录领用信息">
+            <tr>
+                <td><input type="button" onclick="addRow()" value="添加新行" title="添加新行"></td>
+                <td><input type="submit" value="提交" title="提交记录"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>领用日期</td>
+                <td>领用单号</td>
+                <td>机种名称</td>
+                <td>领用数量</td>
+                <td>测试项目</td>
+                <td>序列号</td>
+                <td>周期</td>
+                <td>版本</td>
+                <td>工令</td>
+                <td>备注</td>
+            </tr>
+            {% if not claimsPeek %}
+            {% else %}
+            {% for claim in claimsPeek %}
+            <tr>
+                <td><input type="button" onclick="deleteRow(this)" value="删除本行"></td>
+                <td><input type="date" name="claim_date" id="claim_date" value="{{ claim['claim_date'] }}" required></td>
+                <td><input type="text" name="claim_no" id="claim_no" value="{{ claim['claim_no'] }}" required></td>
+                <td><input type="text" name="PartNo" id="PartNo" value="{{ claim['Partno'] }}" required></td>
+                <td><input type="number" name="claim_qty" id="claim_qty" value="{{ claim['claim_qty'] }}" required></td>
+                <td><input type="text" name="TestItem" id="TestItem" value="{{ claim['TestItem'] }}" required></td>
+                <td><textarea name="SN" id="SN" required>{{ claim['SN'] }}</textarea></td>
+                <td><input type="week" name="DC" id="DC" value="{{ claim['DC'] }}" required></td>
+                <td><input type="text" name="REV" id="REV" value="{{ claim['REV'] }}" required></td>
+                <td><input type="text" name="Work_Order" id="Work_Order" value="{{ claim['Work_Order'] }}" required></td>
+                <td><textarea name="Remarks" id="Remarks">{{ claim['Remarks'] }}</textarea></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </form>
+</div>
+
+<script>
+function addRow() {
+    var table = document.getElementsByTagName("table")[0];
+    var row = table.insertRow(table.rows.length);
+    var cell0 = row.insertCell(0);
+    var cell1 = row.insertCell(1);
+    var cell2 = row.insertCell(2);
+    var cell3 = row.insertCell(3);
+    var cell4 = row.insertCell(4);
+    var cell5 = row.insertCell(5);
+    var cell6 = row.insertCell(6);
+    var cell7 = row.insertCell(7);
+    var cell8 = row.insertCell(8);
+    var cell9 = row.insertCell(9);
+    var cell10 = row.insertCell(10);
+    cell0.innerHTML = '<input type="button" onclick="deleteRow(this)" value="删除本行">';
+    cell1.innerHTML = '<input type="date" name="claim_date" id="claim_date" required>';
+    cell2.innerHTML = '<input type="text" name="claim_no" id="claim_no" required>';
+    cell3.innerHTML = '<input type="text" name="PartNo" id="PartNo" required>';
+    cell4.innerHTML = '<input type="number" name="claim_qty" id="claim_qty" required>';
+    cell5.innerHTML = '<input type="text" name="TestItem" id="TestItem" required>';
+    cell6.innerHTML = '<textarea name="SN" id="SN" required></textarea>';
+    cell7.innerHTML = '<input type="week" name="DC" id="DC" required>';
+    cell8.innerHTML = '<input type="text" name="REV" id="REV" required>';
+    cell9.innerHTML = '<input type="text" name="Work_Order" id="Work_Order" required>';
+    cell10.innerHTML = '<textarea name="Remarks" id="Remarks"></textarea>';
+}
+function deleteRow(row) {
+    // TODO: 删除本行
+}
+</script>
+{% endblock content %}
+{% block right_peek %} {% include "calendar.html" %}{% endblock right_peek %}
