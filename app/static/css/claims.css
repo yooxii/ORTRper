@@ -1,31 +1,40 @@
 .peek {
-  grid-column: 2 / -1;
-  background-color: #f2f2f2;
-  width: max-content;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
+    grid-column: 2 / -1;
+    background-color: #f2f2f2;
+    width: max-content;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
 }
 .peek td {
-  align-items: center;
-  text-align: center;
+    align-items: center;
+    text-align: center;
 }
 .peek input {
-  align-items: center;
-  text-align: center;
+    align-items: center;
+    text-align: center;
 }
 
-#claim_qty,
-#REV {
-  width: 30px;
+.del_hide {
+    display: none;
 }
 
-#claim_no,
-#PartNo,
-#claim_date {
-  width: 100px;
+.del_show {
+    display: block;
 }
 
-#Work_Order {
-  width: 150px;
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+.w30 {
+    width: 30px;
+}
+
+.w100 {
+    width: 100px;
+}
+.w150 {
+    width: 150px;
 }
