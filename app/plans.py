@@ -26,5 +26,5 @@ def Claims():
         db.commit()
         claims = db.execute('SELECT * FROM Claims').fetchall()
         flash('Claim submitted successfully')
-        return redirect(url_for('plans.Claims'))
+        return redirect(url_for('plans.Claims'))        
     return render_template('plans/Claims.html', claimsPeek=claims)

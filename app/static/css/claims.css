@@ -1,0 +1,31 @@
+.peek {
+  grid-column: 2 / -1;
+  background-color: #f2f2f2;
+  width: max-content;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+.peek td {
+  align-items: center;
+  text-align: center;
+}
+.peek input {
+  align-items: center;
+  text-align: center;
+}
+
+#claim_qty,
+#REV {
+  width: 30px;
+}
+
+#claim_no,
+#PartNo,
+#claim_date {
+  width: 100px;
+}
+
+#Work_Order {
+  width: 150px;
+}
