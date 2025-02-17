@@ -1,0 +1,66 @@
+﻿"項次
+No.","試驗項目
+Test Item","試驗時間
+Test Period (Hour)","負責人
+Owner","樣品處理
+Dispose","備 考
+Remark",
+1,Acoustic Noise Test,10,王世敏,回線,"以測試5臺為基礎計算,每臺測試時間為2小時. ",
+2,Adapter EMI/Drop/Ball Impact,24,劉唐英/王世敏,報廢,,
+3,Amazon All ORT Test,360,余軍平/王世敏/李志斌/劉唐英,報廢,,
+4,Amazon Mechanical ORT Test,192,王世敏/李志斌/劉唐英,報廢,,360
+5,For AMZ Burn In Test,168,李志斌,回線,,
+6,For Dell ORT Test (PC),226,李剛/李志斌/史建軍/王世敏,回線,Thermal Shock-->B/I 168Hrs-->EMI-->Acoustic(新增）,
+7,Google _All,192,李志斌/王世敏/李剛,報廢,樣品需保留一年才可以報廢. ,
+8,Google_Burn In Test (By Day),192,李剛,報廢,樣品需保留一年才可以報廢. ,
+9,Google_Tumble/Drop Test (By Day),24,王世敏,報廢,樣品需保留一年才可以報廢. ,
+10,"Google_BI,Drop,Tumble Test (By Day)",168,王世敏,報廢,樣品需保留一年才可以報廢. ,
+11,Google_EMI/ESD Test (By MO),96,劉唐英,報廢,樣品需保留一年才可以報廢. ,
+12,"Google_BI,Drop,Tumble,EMC Test (By MO&Day)",168,王世敏/劉唐英,報廢,樣品需保留一年才可以報廢. ,
+13,ATE,16,陳建明,回線,"Adapter
+PC,Server,Open frame",
+14,EMC&Dell ORT Test,696,李剛/劉唐英/史建軍/余軍平/李志斌,回線,,
+15,Ball Impact Test,1.25,王世敏,報廢,"以測試5臺為基礎計算,每臺測試時間為0.25小時. ",
+16,Bench Test,4,陳建明,報廢,"Adapter
+PC,Server,Open frame",
+17,Burn In Test,168,李剛,回線,,
+18,Conducted EMI Measurement,2.5,李志斌,回線,"以測試5臺為基礎計算,每臺測試時間為 0.5小時. ",
+19,DMTBF Test,1440,李剛,報廢,"初步以2個月60天為基礎,實際以計算為准.",
+20,Drop Test,1.25,王世敏,報廢,"以測試5臺為基礎計算,每臺測試時間為0.25小時. ",
+21,Electrical Fast Transient / Burst Immunity Test,2.5,李志斌,報廢,"以測試5臺為基礎計算,每臺測試時間為 0.5小時. ",
+22,ESD Test,10,李志斌,報廢,"以測試5臺為基礎計算,每臺測試時間為2小時. ",
+23,HALT Test,168,余軍平,報廢,,
+24,Harmonic,2,李志斌,回線,,
+25,HASA,4,余軍平,回線,,
+26,ION Test,3,劉唐英,報廢,,
+27,Microsection Analysis,4,李志斌/劉唐英,報廢,"Adapter
+PC,Server,Open frame",
+28,Non-Operational Temperature and Humidity Test,72,余軍平,報廢,":For Adapter
+:For PC,Server,Open frame",
+29,ORT Rel Test For MP Stage,216,史建軍/李志斌/李剛,報廢,"試驗順序: Conducted EMI->Thermal Shock->B/I
+->Drop&Ball (For Adapter)",
+30,ORT Rel Test For NPI Stage,504,李志斌/余軍平/劉唐英/李剛/史建軍/王世敏,報廢,"試驗順序:非破壞->破壞性
+Adapter
+PC,Server,Open frame",
+31,PLD Test,1,劉唐英,報廢,,
+32,POS Test,40,余軍平,報廢,,
+33,Power and Temperature Cycling (PTC) Test,50,余軍平,報廢,"Adapter
+PC,Server,Open frame",
+34,Strain Gage Test,4,余軍平,報廢,,
+35,Stress Analysis Test,96,陳建明,報廢,"Adapter
+PC,Server,Open frame",
+36,Surface Temperature Test,4,劉唐英,報廢,,
+37,Surge Immunity Test,20,劉唐英,報廢,"以測試5臺為基礎計算,每臺測試時間為 4小時. ",
+38,Taber Linear Abrasion,1,王世敏,報廢,"以測試5臺為基礎計算,每臺測試時間為12分鐘.  ",
+39,Thermal Shock Test,11,史建軍,回線,,
+40,Thermal Test,8,劉唐英,報廢,,
+41,Tumble Test,1,王世敏,報廢,"以測試5臺為基礎計算,每臺測試時間為12分鐘.  ",
+42,"TCH_EMI,表面溫升,Drop,Ball Test (By MO)",48,王世敏/劉唐英,報廢,,
+43,Vibration Test,3.5,余軍平,報廢,,
+44,Packing Vibration Test ,3.5,余軍平,回線,公路卡車頻譜(1.5小時)→目視檢查→空運頻譜(1.5小時)→目視檢查/功能檢查。,
+45,熔融指數,5,李志斌/劉唐英,報廢,,
+46,海康威視All ORT Test (By季度&By月),696,李剛/史建軍/余軍平/劉唐英,報廢,,
+47,海康威視B/I 168Hrs Test (By月),168,李剛,回線,,
+48,Connector Cycling Test,15,王世敏,報廢,"以測試5臺為基礎計算,每臺測試時間為 3小時. ",
+49,Cross Section Analysis,2.5,李志斌/劉唐英,報廢,"Adapter
+PC,Server,Open frame",

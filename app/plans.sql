@@ -34,7 +34,7 @@ CREATE TABLE
     `TestItems` (
         `No` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `TestItem` VARCHAR(50) NOT NULL,
-        `TestPeriod` INTEGER NOT NULL,
+        `TestPeriod` FLOAT NOT NULL,
         `Owner` VARCHAR(50) NOT NULL,
         `Dispose` VARCHAR(20) NOT NULL,
         `Remark` TEXT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE
         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `Code` VARCHAR(5) NOT NULL,
         `Customer` VARCHAR(20) NOT NULL,
-        `product_type` VARCHAR(15) NOT NULL,
-        `full_product_type` VARCHAR(25) NOT NULL,
+        `product_type` VARCHAR(15) NULL,
+        `full_product_type` VARCHAR(25) NULL,
         FOREIGN KEY (`Customer`) REFERENCES `Schedule` (`Customer`)
     );
 
@@ -64,7 +64,7 @@ CREATE TABLE
     `Claims` (
         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `claim_date` DATE NOT NULL,
-        `claim_no` VARCHAR(20) UNIQUE  NOT NULL,
+        `claim_no` VARCHAR(20) UNIQUE NOT NULL,
         `PartNo` VARCHAR(15) NOT NULL,
         `claim_qty` DECIMAL(10, 2) NOT NULL,
         `TestItem` VARCHAR(50) NULL,

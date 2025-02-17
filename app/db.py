@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 import click
 from flask import current_app, g
@@ -40,20 +41,32 @@ def init_ort_db():
 
 def init_plans_db():
     plansdb = get_plans_db()
-    
     with current_app.open_resource('plans.sql') as f:
         plansdb.executescript(f.read().decode('utf-8'))
-        
+    
+    custcode = pd.read_csv(current_app.config['ORT_PLANS']["CustCode"])
+    for i in range(len(custcode)):
+        plansdb.execute("INSERT INTO CustCode (Code, Customer, product_type, full_product_type) VALUES (?,?,?,?)", (custcode.iloc[i,0], custcode.iloc[i,1], custcode.iloc[i,2], custcode.iloc[i,3]))
+        plansdb.commit()
+    ProductType = pd.read_csv(current_app.config['ORT_PLANS']["ProductType"])
+    for i in range(len(ProductType)):
+        plansdb.execute("INSERT INTO ProductType (Code, Type) VALUES (?,?)", (ProductType.iloc[i,0], ProductType.iloc[i,1]))
+        plansdb.commit()
+    TestItems = pd.read_csv(current_app.config['ORT_PLANS']["TestItems"])
+    for i in range(len(TestItems)):
+        plansdb.execute("INSERT INTO TestItems (TestItem, TestPeriod, Owner, Dispose, Remark) VALUES (?,?,?,?,?)", (TestItems.iloc[i,1], TestItems.iloc[i,2], TestItems.iloc[i,3], TestItems.iloc[i,4], TestItems.iloc[i,5]))
+        plansdb.commit()
+
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_ort_db_command)
     app.cli.add_command(init_plans_db_command)
-        
+
 @click.command('init-ort-db')
 def init_ort_db_command():
     init_ort_db()
     click.echo('Initialized the ORT database.')
-    
+
 @click.command('init-plans-db')
 def init_plans_db_command():
     init_plans_db()

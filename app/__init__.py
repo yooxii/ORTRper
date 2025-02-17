@@ -7,7 +7,11 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         ORT_DATABASE=os.path.join(app.instance_path, 'ort.sqlite'),
         PLANS_DATABASE=os.path.join(app.instance_path, 'plans.sqlite'),
-        ORT_SCHEDULE=os.path.join(app.instance_path, 'Y2025 ORT Test Schedule.xlsx')
+        ORT_PLANS={
+            "CustCode":os.path.join(app.instance_path, 'CustCode.csv'),
+            "ProductType":os.path.join(app.instance_path, 'ProductType.csv'),
+            "TestItems":os.path.join(app.instance_path, 'TestItems.csv')
+        }
     )
     
     if test_config is None:
