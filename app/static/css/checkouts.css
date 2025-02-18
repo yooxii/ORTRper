@@ -1,0 +1,71 @@
+.peek {
+    grid-column: 2 / -1;
+    background-color: #f2f2f2;
+    width: max-content;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+.peek td {
+    align-items: center;
+    text-align: center;
+}
+.peek input,
+.peek select {
+    align-items: center;
+    text-align: center;
+    height: 25px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+}
+.peek textarea {
+    align-items: center;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+}
+.peek button {
+    align-items: center;
+    text-align: center;
+    height: 32px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.peek button:hover {
+    background-color: #3e8e41;
+}
+.peek button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+}
+
+.del_hide {
+    display: none;
+}
+
+.del_show {
+    display: block;
+}
+
+input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+}
+
+.w30 {
+    width: 30px;
+}
+
+.w100 {
+    width: 100px;
+}
+.w150 {
+    width: 150px;
+}

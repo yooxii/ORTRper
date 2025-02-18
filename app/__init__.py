@@ -10,7 +10,8 @@ def create_app(test_config=None):
         ORT_PLANS={
             "CustCode":os.path.join(app.instance_path, 'CustCode.csv'),
             "ProductType":os.path.join(app.instance_path, 'ProductType.csv'),
-            "TestItems":os.path.join(app.instance_path, 'TestItems.csv')
+            "TestItems":os.path.join(app.instance_path, 'TestItems.csv'),
+            "checkoutsTIs":os.path.join(app.instance_path, 'checkoutsTIs.csv')
         }
     )
     

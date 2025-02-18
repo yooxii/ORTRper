@@ -1,0 +1,173 @@
+{% extends "ort_base.html" %}
+
+{% block header %}
+<h1>{% block title %}领用{% endblock title %}</h1>
+{% endblock header %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/checkouts.css') }}">
+<div class="peek">
+    <form method="post">
+        <h3>领用信息</h3>
+        <input type="button" onclick="addRow()" value="添加新行" title="添加新行">
+        <input type="button" onclick="triggerDel()" value="删除选中行" title="删除选中行">
+        <input type="submit" value="提交" title="提交">
+        <table id="checkouts_table" name="checkouts_peek" , title="领用信息">
+            <thead>
+                <tr>
+                    <td><a href="javascript:void(0)" id="toggleAll" onclick="toggleAll(this)" title="反选">反选</a></td>
+                    <td>领用日期</td>
+                    <td>领用单号</td>
+                    <td>机种名称</td>
+                    <td>数量</td>
+                    <td>测试项目</td>
+                    <td>序列号</td>
+                    <td>周期</td>
+                    <td>版本</td>
+                    <td>工令</td>
+                    <td>备注</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not checkoutsPeek %}
+                {% else %}
+                {% for checkout in checkoutsPeek %}
+                <tr>
+                    <td><input type="checkbox" name="checkout_id"></td>
+                    <td><input type="date" name="checkout_date" class="w100" value="{{ checkout['checkout_date'] }}" required>
+                    </td>
+                    <td><input type="text" name="checkout_no" class="w100" value="{{ checkout['checkout_no'] }}" required>
+                    </td>
+                    <td><input type="text" name="PartNo" class="w100" value="{{ checkout['Partno'] }}" required></td>
+                    <td><input type="number" name="checkout_qty" class="w30" value="{{ checkout['checkout_qty'] }}" required>
+                    </td>
+                    <td><select name="TestItem" title='测试项目' class="w150" required>
+                            {% for item in testItems %}
+                            <option value="{{ item['TI'] }}" {% if item['TI']==checkout['TestItem'] %}selected{% endif
+                                %}>{{ item['TI'] }}</option>
+                            {% endfor %}
+                        </select></td>
+                    <td><textarea name="SN" class="w150" required>{{ checkout['SN'] }}</textarea></td>
+                    <td><input type="week" name="DC" value="{{ checkout['DC'] }}" required></td>
+                    <td><input type="text" name="REV" class="w30" value="{{ checkout['REV'] }}" required></td>
+                    <td><input type="text" name="Work_Order" class="w150" value="{{ checkout['Work_Order'] }}" required>
+                    </td>
+                    <td><textarea name="Remarks">{{ checkout['Remarks'] }}</textarea></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<script>
+    function addRow() {
+        var table = document.getElementsByTagName("table")[0];
+
+        if (table.rows.length === 1) {
+            // 如果表格没有行，则插入新的行并添加元素
+            var row = table.insertRow(1);
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
+            var cell4 = row.insertCell(4);
+            var cell5 = row.insertCell(5);
+            var cell6 = row.insertCell(6);
+            var cell7 = row.insertCell(7);
+            var cell8 = row.insertCell(8);
+            var cell9 = row.insertCell(9);
+            var cell10 = row.insertCell(10);
+            cell0.innerHTML = '<input type="checkbox" name="checkout_id">';
+            cell1.innerHTML = '<input type="date" name="checkout_date" class="w100" required>';
+            cell2.innerHTML = '<input type="text" name="checkout_no" class="w100" required>';
+            cell3.innerHTML = '<input type="text" name="PartNo" class="w100" required>';
+            cell4.innerHTML = '<input type="number" name="checkout_qty" class="w30" required>';
+            cell5.innerHTML = "<select name='TestItem' title='测试项目' class='w150' required>\n{% for item in testItems %}\n<option value='{{ item['TI'] }}'>{{ item['TI'] }}</option>\n{% endfor %}\n</select>";
+            cell6.innerHTML = '<textarea name="SN" class="w150" required></textarea>';
+            cell7.innerHTML = '<input type="week" name="DC" required>';
+            cell8.innerHTML = '<input type="text" name="REV" class="w30" required>';
+            cell9.innerHTML = '<input type="text" name="Work_Order" class="w150" required>';
+            cell10.innerHTML = '<textarea name="Remarks"></textarea>';
+        } else {
+            // 如果表格有行，则复制最后一行
+            var lastRow = table.rows[table.rows.length - 1];
+            var newRow = table.insertRow(table.rows.length);
+
+            for (var i = 0; i < lastRow.cells.length; i++) {
+                var newCell = newRow.insertCell(i);
+                newCell.innerHTML = lastRow.cells[i].innerHTML;
+            }
+
+            // 清空新行的输入值
+            var inputs = newRow.getElementsByTagName("input");
+            var textareas = newRow.getElementsByTagName("textarea");
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type === "button") {
+                    continue;
+                }
+                inputs[i].value = "";
+            }
+
+            for (var i = 0; i < textareas.length; i++) {
+                textareas[i].value = "";
+            }
+        }
+    }
+
+    function triggerDel() {
+        const table = document.getElementById("checkouts_table");
+        const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
+
+        if (checkboxes.length === 0) {
+            console.warn("请选择要删除的行");
+            return;
+        }
+
+        checkboxes.forEach(checkbox => {
+            const row = checkbox.parentNode.parentNode;
+            const checkoutNoInput = row.querySelector('input[name="checkout_no"]');
+            const checkoutPn = row.querySelector('input[name="PartNo"]').value;
+            const checkoutDate = row.querySelector('input[name="checkout_date"]').value;
+            const workOrder = row.querySelector('input[name="Work_Order"]').value;
+
+            if (!checkoutNoInput) {
+                console.error("无法找到领用单号输入框");
+                return;
+            }
+
+            const checkoutNo = checkoutNoInput.value;
+            console.log(`删除行 (Checkout No: ${checkoutNo})`);
+
+            // 提示用户确认删除，如果为单号为空则不提示
+            if (!(checkoutNo === "")) {
+                if (!confirm(`确认删除行"${checkoutNo}-${checkoutPn}-${checkoutDate}-${workOrder}"吗？`)) {
+                    return;
+                }
+            }
+
+            // 发送请求删除数据库中的数据
+            fetch('{{ url_for(".delete") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `checkout_no=${checkoutNo}`
+            });
+            row.parentNode.removeChild(row);
+        });
+    }
+
+    function toggleAll(checkbox) {
+        var table = document.getElementById("checkouts_table");
+        var checkboxes = table.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = checkbox.checked ? false : true;
+        });
+    }
+
+</script>
+{% endblock content %}
