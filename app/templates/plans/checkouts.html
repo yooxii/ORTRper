@@ -41,7 +41,7 @@
                     <td><input type="text" name="PartNo" class="w100" value="{{ checkout['Partno'] }}" required></td>
                     <td><input type="number" name="checkout_qty" class="w30" value="{{ checkout['checkout_qty'] }}" required>
                     </td>
-                    <td><select name="TestItem" title='测试项目' class="w150" required>
+                    <td><select name="TestItem" title='测试项目' class="w100" required>
                             {% for item in testItems %}
                             <option value="{{ item['TI'] }}" {% if item['TI']==checkout['TestItem'] %}selected{% endif
                                 %}>{{ item['TI'] }}</option>
@@ -84,7 +84,7 @@
             cell2.innerHTML = '<input type="text" name="checkout_no" class="w100" required>';
             cell3.innerHTML = '<input type="text" name="PartNo" class="w100" required>';
             cell4.innerHTML = '<input type="number" name="checkout_qty" class="w30" required>';
-            cell5.innerHTML = "<select name='TestItem' title='测试项目' class='w150' required>\n{% for item in testItems %}\n<option value='{{ item['TI'] }}'>{{ item['TI'] }}</option>\n{% endfor %}\n</select>";
+            cell5.innerHTML = "<select name='TestItem' title='测试项目' class='w100' required>\n{% for item in testItems %}\n<option value='{{ item['TI'] }}'>{{ item['TI'] }}</option>\n{% endfor %}\n</select>";
             cell6.innerHTML = '<textarea name="SN" class="w150" required></textarea>';
             cell7.innerHTML = '<input type="week" name="DC" required>';
             cell8.innerHTML = '<input type="text" name="REV" class="w30" required>';

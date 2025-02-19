@@ -10,6 +10,7 @@
     align-items: center;
     text-align: center;
 }
+/*
 .peek input,
 .peek select {
     align-items: center;
@@ -45,7 +46,6 @@
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
 }
-
 .del_hide {
     display: none;
 }
@@ -57,15 +57,16 @@
 input[type="checkbox"] {
     width: 25px;
     height: 25px;
-}
+} */
+
 
 .w30 {
-    width: 30px;
+    width: 40px;
 }
 
 .w100 {
-    width: 100px;
+    width: 120px;
 }
 .w150 {
-    width: 150px;
+    width: 180px;
 }
