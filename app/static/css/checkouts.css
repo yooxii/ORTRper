@@ -10,15 +10,17 @@
     align-items: center;
     text-align: center;
 }
-/*
 .peek input,
 .peek select {
+    font-family: 'Times New Roman', Times, serif;
     align-items: center;
     text-align: center;
-    height: 25px;
     padding: 0;
     margin: 0;
     border: 1px solid #ddd;
+}
+.peek input[type="text"] {
+    color: #000;
 }
 .peek textarea {
     align-items: center;
@@ -27,25 +29,29 @@
     margin: 0;
     border: 1px solid #ddd;
 }
-.peek button {
-    align-items: center;
-    text-align: center;
-    height: 32px;
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid #ddd;
+
+.check_btn {
     background-color: #4CAF50;
     color: white;
+    padding: 10px 20px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 18px;
+    height: 18px;
 }
-.peek button:hover {
+
+.check_btn:hover {
     background-color: #3e8e41;
 }
-.peek button:active {
+
+.check_btn:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
+    transform: translateY(2px);
+    transition: transform 0.3s;
 }
+
 .del_hide {
     display: none;
 }
@@ -54,14 +60,8 @@
     display: block;
 }
 
-input[type="checkbox"] {
-    width: 25px;
-    height: 25px;
-} */
-
-
 .w30 {
-    width: 40px;
+    width: 50px;
 }
 
 .w100 {

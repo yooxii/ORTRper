@@ -20,8 +20,28 @@ def schedule():
 def Checkouts():
     db = get_plans_db()
     db_checkouts = db.execute('SELECT * FROM TCheckouts').fetchall()
-    tis = db.execute('SELECT * FROM CheckoutTIs').fetchall()
     
+    return render_template('plans/Checkouts.html', checkoutsPeek=db_checkouts)
+
+@bp.route('/checkouts/import_checkouts', methods=('GET', 'POST'))
+def import_checkouts():
+    db = get_plans_db()
+    db_checkouts = db.execute('SELECT * FROM TCheckouts').fetchall()
+    
+    return render_template('plans/Checkouts.html', checkoutsPeek=db_checkouts)
+
+@bp.route('/checkouts/export_checkouts', methods=('GET', 'POST'))
+def export_checkouts():
+    db = get_plans_db()
+    db_checkouts = db.execute('SELECT * FROM TCheckouts').fetchall()
+    
+    return render_template('plans/Checkouts.html', checkoutsPeek=db_checkouts)
+
+@bp.route('/checkouts/edit_checkouts', methods=('GET', 'POST'))
+def edit_checkouts():
+    db = get_plans_db()
+    db_checkouts = db.execute('SELECT * FROM TCheckouts').fetchall()
+    tis = db.execute('SELECT * FROM CheckoutTIs').fetchall()
     if request.method == 'POST':
         ckouts = request.form.to_dict(flat=False)  # 使用to_dict(flat=False)获取表单数据为字典列表
 
@@ -36,39 +56,15 @@ def Checkouts():
                 flash('Checkout with number {} updated successfully'.format(checkout_no))
             else:
                 try:
+                    print(checkout)
                     db.execute('INSERT INTO TCheckouts (checkout_date, checkout_no, PartNo, checkout_qty, TestItem, SN, DC, REV, Work_Order, Remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', checkout)
                     db.commit()
                     flash('Checkout with number {} submitted successfully'.format(checkout_no))
                 except Exception as e:
                     flash('Error submitting checkout with number {}: {}'.format(checkout_no, str(e)))
                     db.rollback()  # 回滚事务以防止数据不一致
-        return redirect(url_for('plans.checkouts'))
-    
-    return render_template('plans/Checkouts.html', checkoutsPeek=db_checkouts, testItems=tis)
-
-@bp.route('/checkouts/edit/<int:checkout_id>', methods=('GET', 'POST'))
-def edit_checkout(checkout_id):
-    db = get_plans_db()
-    db_checkout = db.execute('SELECT * FROM TCheckouts WHERE checkout_id = ?', (checkout_id,)).fetchone()
-    if request.method == 'POST':
-        checkout_no = request.form['checkout_no']
-        part_no = request.form['part_no']
-        checkout_qty = request.form['checkout_qty']
-        test_item = request.form['test_item']
-        sn = request.form['sn']
-        dc = request.form['dc']
-        rev = request.form['rev']
-        work_order = request.form['work_order']
-        remarks = request.form['remarks']
-        try:
-            db.execute('UPDATE Checkouts SET checkout_no = ?, PartNo = ?, checkout_qty = ?, TestItem = ?, SN = ?, DC = ?, REV = ?, Work_Order = ?, Remarks = ? WHERE checkout_id = ?', (checkout_no, part_no, checkout_qty, test_item, sn, dc, rev, work_order, remarks, checkout_id))
-            db.commit()
-            flash('Checkout with ID {} updated successfully'.format(checkout_id))
-        except Exception as e:
-            flash('Error updating checkout with ID {}: {}'.format(checkout_id, str(e)))
-            db.rollback()  # 回滚事务以防止数据不一致
-        return redirect(url_for('plans.Checkouts'))
-    return render_template('plans/edit_checkout.html', checkout=db_checkout)
+        return redirect(url_for('.Checkouts'))
+    return render_template('plans/checkouts_edit.html', checkoutsPeek=db_checkouts, testItems=tis)
 
 @bp.route('/checkouts/delete', methods=('POST',))
 def delete():

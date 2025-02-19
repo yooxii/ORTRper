@@ -62,7 +62,7 @@ def init_ti_db():
     for i in range(len(TestItems)):
         tidb.execute("INSERT INTO TestItems (TestItem, TestPeriod, Owner, Dispose, Remark) VALUES (?,?,?,?,?)", (TestItems.iloc[i,1], TestItems.iloc[i,2], TestItems.iloc[i,3], TestItems.iloc[i,4], TestItems.iloc[i,5]))
         tidb.commit()
-    checkoutsTIs = pd.read_csv(current_app.config['ORT_PLANS']["checkoutsTIs"])
+    checkoutsTIs = pd.read_csv(current_app.config['ORT_PLANS']["checkoutsTIs"], header=None)
     for i in range(len(checkoutsTIs)):
         tidb.execute("INSERT INTO CheckoutTIs (TI) VALUES (?)", (checkoutsTIs.iloc[i,0],))
         tidb.commit()
