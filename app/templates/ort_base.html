@@ -5,9 +5,9 @@
 
 <head>
     <!-- <title>ORT报告工作站</title> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/lazy.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
     <script src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </head>
@@ -67,7 +67,7 @@
                 <hr />
             </ul>
         </nav>
-        <div class="container" id="container">{% block content %} {% endblock content %} {% block right_peek %} {%
+        <div class="container_content" id="container">{% block content %} {% endblock content %} {% block right_peek %} {%
             endblock right_peek %}</div>
     </main>
     <footer>

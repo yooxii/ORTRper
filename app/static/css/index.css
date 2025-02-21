@@ -126,21 +126,21 @@ hr {
 main {
   position: absolute;
   height: 2000px;
-  width: 100%;
+  width: calc(100vw - 15px);
   padding: 0;
   background-color: #ebe2e2;
 }
 
-.container {
+.container_content {
   position: absolute;
   display: grid;
   grid-template-columns: max-content auto auto max-content;
   grid-template-rows: max-content max-content;
-  width: 100%;
+  width: max-content;
   height: 100%;
   top: 0;
   left: 95px;
-  max-width: 100%;
+  max-width: calc(100vw - 110px);
   background-color: #ebe2e2;
   padding: 20px;
 } 

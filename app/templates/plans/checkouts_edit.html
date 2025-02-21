@@ -1,68 +1,27 @@
-{% extends "ort_base.html" %}
+{% extends "plans/checkouts.html" %}
+
+{% block checkouts_edit_btns %}
+<input type="button" class="btn btn-primary btn-pill btn-sm" onclick="addRow()" value="+" title="添加新行">
+<input type="button" class="btn btn-primary btn-pill btn-sm" onclick="triggerDel()" value="删除选中行" title="删除选中行">
+<input type="submit" class="btn btn-primary btn-pill btn-sm" value="提交" title="提交">
+<a href="{{ url_for('.Checkouts') }}" class="btn btn-secondary btn-pill btn-sm" title="返回">返回</a>
+{% endblock checkouts_edit_btns %}
+
+{% block checkouts_edit_checkbox %}
+<td><a href="javascript:void(0)" class="btn btn-light btn-sm" id="toggleAll" onclick="toggleAll(this)" title="反选">反选</a></td>
+{% endblock checkouts_edit_checkbox %}
+
+{% block checkouts_edit_checkbox_input %}
+<td><input type="checkbox" class="check_btn" name="checkout_id"></td>
+{% endblock checkouts_edit_checkbox_input %}
+
+{% block noonly %}required{% endblock noonly %}
 
 {% block header %}
 <h1>{% block title %}领用{% endblock title %}</h1>
 {% endblock header %}
 
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/checkouts.css') }}">
-<div class="peek">
-    <form method="post">
-        <h3>领用信息</h3>
-        <input type="button" class="btn btn-primary btn-pill btn-sm" onclick="addRow()" value="+" title="添加新行">
-        <input type="button" class="btn btn-primary btn-pill btn-sm" onclick="triggerDel()" value="删除选中行" title="删除选中行">
-        <input type="submit" class="btn btn-primary btn-pill btn-sm" value="提交" title="提交">
-        <a href="{{ url_for('.Checkouts') }}" class="btn btn-secondary btn-pill btn-sm" title="返回">返回</a>
-        <span>{{ message }}</span>
-        <table id="checkouts_table" name="checkouts_peek" , title="领用信息">
-            <thead>
-                <tr>
-                    <td><a href="javascript:void(0)" class="btn btn-light btn-sm" id="toggleAll" onclick="toggleAll(this)" title="反选">反选</a></td>
-                    <td>领用日期</td>
-                    <td>领用单号</td>
-                    <td>机种名称</td>
-                    <td>数量</td>
-                    <td>测试项目</td>
-                    <td>序列号</td>
-                    <td>周期</td>
-                    <td>版本</td>
-                    <td>工令</td>
-                    <td>备注</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% if not checkoutsPeek %}
-                {% else %}
-                {% for checkout in checkoutsPeek %}
-                <tr>
-                    <td><input type="checkbox" class="check_btn" name="checkout_id"></td>
-                    <td><input type="date" name="checkout_date" class="w100 form-control" value="{{ checkout['checkout_date'] }}" required>
-                    </td>
-                    <td><input type="text" name="checkout_no" class="w100" value="{{ checkout['checkout_no'] }}" required>
-                    </td>
-                    <td><input type="text" name="PartNo" class="w100" value="{{ checkout['Partno'] }}" required></td>
-                    <td><input type="number" name="checkout_qty" class="w30" value="{{ checkout['checkout_qty'] }}" required>
-                    </td>
-                    <td><select name="TestItem" title='测试项目' class="w100" required>
-                            {% for item in testItems %}
-                            <option value="{{ item['TI'] }}" {% if item['TI']==checkout['TestItem'] %}selected{% endif
-                                %}>{{ item['TI'] }}</option>
-                            {% endfor %}
-                        </select></td>
-                    <td><textarea name="SN" class="w150" required>{{ checkout['SN'] }}</textarea></td>
-                    <td><input type="week" name="DC" value="{{ checkout['DC'] }}" required></td>
-                    <td><input type="text" name="REV" class="w30" value="{{ checkout['REV'] }}" required></td>
-                    <td><input type="text" name="Work_Order" class="w150" value="{{ checkout['Work_Order'] }}" required>
-                    </td>
-                    <td><textarea name="Remarks">{{ checkout['Remarks'] }}</textarea></td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </tbody>
-        </table>
-    </form>
-</div>
-
+{% block checkouts_edit_script %}
 <script>
     function addRow() {
         var table = document.getElementsByTagName("table")[0];
@@ -172,4 +131,4 @@
     }
 
 </script>
-{% endblock content %}
+{% endblock checkouts_edit_script %}

@@ -12,7 +12,9 @@ def create_app(test_config=None):
             "ProductType":os.path.join(app.instance_path, 'ProductType.csv'),
             "TestItems":os.path.join(app.instance_path, 'TestItems.csv'),
             "checkoutsTIs":os.path.join(app.instance_path, 'checkoutsTIs.csv')
-        }
+        },
+        UPLOAD_FOLDER=os.path.join(app.instance_path, 'uploads'),
+        ALLOWED_EXTENSIONS={'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'xlsx', 'csv', 'xls'}
     )
     
     if test_config is None:
