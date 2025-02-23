@@ -1,78 +1,125 @@
-{% extends "ort_base.html" %}
-
-{% block header %}
+{% extends "ort_base.html" %} {% block header %}
 <h1>{% block title %}领用{% endblock title %}</h1>
-{% endblock header %}
-
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/checkouts.css') }}">
+{% endblock header %} {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/checkouts.css') }}" />
 <div class="peek">
     <h3>领用信息</h3>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
+    {% with messages = get_flashed_messages() %} {% if messages %}
     <div class="flashes alert alert-success alert-dismissible fade show" role="alert" id="flashes">
-        <button type="button" class="close" style="position: absolute;top: calc(50% - 24px);" data-dismiss="alert"
-            aria-label="Close">
+        <button type="button" class="close" style="position: absolute; top: calc(50% - 24px)" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        {% for message in messages %}
-        {{ message }}<br>
+        {% for message in messages %} {{ message }}<br />
         {% endfor %}
     </div>
-    {% endif %}
-    {% endwith %}
-    {% if not checkouts_edit_btns %}
+    {% endif %} {% endwith %} {% if not checkouts_edit_btns %}
     <form method="post" action="{{ url_for('.import_checkouts') }}" enctype="multipart/form-data" id="uploadForm">
-        <input type="file" name="file" id="fileInput">
-        <input type="submit" class="btn btn-primary btn-pill btn-sm" id="uploadBtn" value="导入">
+        <input type="file" name="file" id="fileInput" />
+        <input type="submit" class="btn btn-primary btn-pill btn-sm" id="uploadBtn" value="导入" />
     </form>
     <a href="{{ url_for('.export_checkouts') }}" class="btn btn-primary btn-pill btn-sm" title="导出到Excel文件">导出</a>
     {% endif %}
-    {% block checkouts_edit_btns %}
-    <a href="{{ url_for('.edit_checkouts') }}" class="btn btn-primary btn-pill btn-sm" title="编辑">编辑</a>
-    {% endblock checkouts_edit_btns %}
     <form method="post" action="{{ url_for('.edit_checkouts') }}">
+        {% block checkouts_edit_btns %}
+        <a href="{{ url_for('.edit_checkouts') }}" class="btn btn-primary btn-pill btn-sm" title="编辑">编辑</a>
+        {% endblock checkouts_edit_btns %}
         <table id="checkouts_table" name="checkouts_peek" title="领用信息">
             <thead>
                 <tr>
-                    {% block checkouts_edit_checkbox %}
-                    {% endblock checkouts_edit_checkbox %}
-                    <td>NO.</td>
-                    <td>领用日期</td>
-                    <td>领用单号</td>
-                    <td>机种名称</td>
-                    <td>数量</td>
-                    <td>测试项目</td>
-                    <td>序列号</td>
-                    <td>周期</td>
-                    <td>版本</td>
-                    <td>工令</td>
-                    <td>备注</td>
+                    <th onclick="sortTable(0)">
+                        <span>NO.</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(1)">
+                        <span>领用日期</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(2)">
+                        <span>领用单号</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(3)">
+                        <span>机种名称</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(4)">
+                        <span>数量</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(5)">
+                        <span>测试项目</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(6)">
+                        <span>序列号</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(7)">
+                        <span>周期</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(8)">
+                        <span>版本</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(9)">
+                        <span>工令</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
+                    <th onclick="sortTable(10)">
+                        <span>备注</span>
+                        <div class="arr">
+                            <div class="arrUp"></div>
+                            <div class="arrDown"></div>
+                        </div>
+                    </th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for checkout in checkoutsPeek %}
                 <tr>
-                    {% block checkouts_edit_checkbox_input %}
-                    {% endblock checkouts_edit_checkbox_input %}
-                    <td><input type="text" name="checkout_id" class="w30" value="{{ checkout['id'] }}" {{ rd_or_rq }}>
-                    </td>
-                    <td><input type="date" name="checkout_date" class="w100" value="{{ checkout['checkout_date'] }}" {{
-                            rd_or_rq }}></td>
-                    <td><input type="text" name="checkout_no" class="w100" value="{{ checkout['checkout_no'] }}" {{
-                            rd_or_rq }}></td>
-                    <td><input type="text" name="PartNo" class="w100" value="{{ checkout['Partno'] }}" {{ rd_or_rq }}>
-                    </td>
-                    <td><input type="number" name="checkout_qty" class="w30" value="{{ checkout['checkout_qty'] }}" {{
-                            rd_or_rq }}></td>
-                    <td><input type="text" name="TestItem" class="w100" value="{{ checkout['TestItem'] }}" {{ rd_or_rq
-                            }}>
-                    </td>
+                    {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
+                    <td><input type="text" name="checkout_id" class="w30" value="{{ checkout['id'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="date" name="checkout_date" class="w100" value="{{ checkout['checkout_date'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="text" name="checkout_no" class="w100" value="{{ checkout['checkout_no'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="text" name="PartNo" class="w100" value="{{ checkout['Partno'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="number" name="checkout_qty" class="w30" value="{{ checkout['checkout_qty'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="text" name="TestItem" class="w100" value="{{ checkout['TestItem'] }}" {{ rd_or_rq }} /></td>
                     <td><textarea name="SN" class="w150" {{ rd_or_rq }}>{{ checkout['SN'] }}</textarea></td>
-                    <td><input type="week" name="DC" value="{{ checkout['DC'] }}" {{ rd_or_rq }}></td>
-                    <td><input type="text" name="REV" class="w30" value="{{ checkout['REV'] }}" {{ rd_or_rq }}></td>
-                    <td><input type="text" name="Work_Order" class="w150" value="{{ checkout['Work_Order'] }}" {{
-                            rd_or_rq }}></td>
+                    <td><input type="week" name="DC" value="{{ checkout['DC'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="text" name="REV" class="w30" value="{{ checkout['REV'] }}" {{ rd_or_rq }} /></td>
+                    <td><input type="text" name="Work_Order" class="w150" value="{{ checkout['Work_Order'] }}" {{ rd_or_rq }} /></td>
                     <td><textarea name="Remarks">{{ checkout['Remarks'] }}</textarea></td>
                 </tr>
                 {% endfor %}
@@ -81,16 +128,88 @@
     </form>
 </div>
 
-{% block checkouts_edit_script %}
-{% endblock checkouts_edit_script %}
+{% block checkouts_edit_script %} {% endblock checkouts_edit_script %}
 <script>
     function handleFileSelect() {
-        var fileInput = document.getElementById('fileInput');
+        var fileInput = document.getElementById("fileInput");
         fileInput.click();
         while (!fileInput.value) {
             continue;
         }
         return true;
+    }
+    function sortTable(n) {
+        var table = document.getElementById("checkouts_table"),
+            rows,
+            switching = true,
+            i,
+            x,
+            y,
+            shouldSwitch,
+            dir = "asc",
+            switchcount = 0;
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < rows.length - 1; i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n].getElementsByTagName("input")[0].value;
+                y = rows[i + 1].getElementsByTagName("TD")[n].getElementsByTagName("input")[0].value;
+
+                var x_v = parseInt(x, 10);
+                var x_type = rows[i].getElementsByTagName("TD")[n].getElementsByTagName("input")[0].type;
+                var y_v = parseInt(y, 10);
+
+                if (isNaN(x_v) || x_type == "date") {
+                    if (dir == "asc") {
+                        if (x.toLowerCase() > y.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.toLowerCase() < y.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                } else {
+                    if (dir == "asc") {
+                        if (x_v > y_v) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x_v < y_v) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+
+        // 更新箭头的显示样式
+        $(".arrUp").on("click", function () {
+            $(this).css("border-bottom-color", "#b2b2b2");
+            $(".arrDown").css("border-top-color", "#ccc");
+        });
+        $(".arrDown").on("click", function () {
+            $(this).css("border-top-color", "#b2b2b2");
+            $(".arrUp").css("border-bottom-color", "#ccc");
+        });
     }
 </script>
 {% endblock content %}

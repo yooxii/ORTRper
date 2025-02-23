@@ -28,14 +28,14 @@ CREATE TABLE
     `TCheckouts` (
         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `checkout_date` DATE NOT NULL,
-        `checkout_no` VARCHAR(20) UNIQUE NOT NULL,
+        `checkout_no` VARCHAR(20) NOT NULL,
         `PartNo` VARCHAR(15) NOT NULL,
-        `checkout_qty` DECIMAL(10, 2) NOT NULL,
         `TestItem` VARCHAR(50) NULL,
+        `checkout_qty` DECIMAL(10, 2) NOT NULL,
         `SN` TEXT NOT NULL,
         `DC` VARCHAR(8) NOT NULL,
         `REV` VARCHAR(10) NOT NULL,
         `Work_Order` VARCHAR(40) NOT NULL,
-        `checkout_status` VARCHAR(20) NULL,
-        `Remarks` TEXT NULL
+        `Remarks` TEXT NULL,
+        `checkout_status` VARCHAR(20) NULL
     );

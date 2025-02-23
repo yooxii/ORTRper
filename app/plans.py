@@ -34,9 +34,18 @@ def allowed_file(filename):
 
 def conver_excel_date(x):
     try:
-        return pd.to_datetime('1899-12-30') + pd.to_timedelta(x, unit='D')
+        tmp = pd.to_datetime('1899-12-30') + pd.to_timedelta(x, unit='D')
+        return tmp.strftime('%Y-%m-%d')  # 转换日期格式
     except:
         return x  # 如果转换失败，返回原始值
+    
+def conver_excel_week(x):
+    try:
+        x = str(int(x))
+        tmp = '20'+x[:2]+'-W'+x[2:4]
+        return tmp
+    except ValueError:
+        return x
 
 @bp.route('/checkouts/import_checkouts', methods=('GET', 'POST'))
 def import_checkouts():
@@ -58,27 +67,15 @@ def import_checkouts():
         if file and allowed_file(file.filename):
             excelFile = pd.ExcelFile(BytesIO(file.stream.read()))
             for sheet_name in excelFile.sheet_names:
-                df = excelFile.parse(sheet_name,converters={0: conver_excel_date},skiprows=3)
+                # 从db里读取所有列名作为df的列名
+                colNames = db.execute('PRAGMA table_info(TCheckouts)').fetchall()[1:11]
+                colNames = [i[1] for i in colNames]
+                df = excelFile.parse(sheet_name,converters={0: conver_excel_date,6: conver_excel_week},skiprows=3)
                 # 去掉空值大于1的行
                 df = df.dropna(thresh=9)
-                # 不取代列名
-                df.columns = df.iloc[0]
-                # 从db里读取所有列名作为df的列名
-                index = db.execute('PRAGMA table_info(TCheckouts)').fetchall()
-                index = [i[1] for i in index]
-                df = df.reindex(columns=index)
+                df = df.set_axis(colNames, axis=1)
                 inspect(df)
                 df.to_sql('TCheckouts', db, if_exists='append', index=False)
-                # for row in df.itertuples():
-                #     try:
-                #         # 将row转化为只有值的元组
-                #         checkout_ = tuple(row[1:])
-                #         inspect(checkout_)
-                #         db.execute('INSERT INTO TCheckouts (checkout_date, checkout_no, PartNo, checkout_qty, TestItem, SN, DC, REV, Work_Order, Remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', checkout_)
-                #         db.commit()
-                #     except Exception as e:
-                #         flash('Error importing checkouts: {}'.format(str(e)))
-                #         db.rollback()  # 回滚事务以防止数据不一致
     
     return render_template('plans/Checkouts.html', checkoutsPeek=db_checkouts, rd_or_rq='readonly')
 
@@ -109,7 +106,8 @@ def edit_checkouts():
                 flash('Checkout with number {} updated successfully'.format(checkout_no))
             else:
                 try:
-                    db.execute('INSERT INTO TCheckouts (checkout_date, checkout_no, PartNo, checkout_qty, TestItem, SN, DC, REV, Work_Order, Remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', checkout[1:])
+                    # inspect(checkout)
+                    db.execute('INSERT INTO TCheckouts (checkout_date, checkout_no, PartNo, checkout_qty, TestItem, SN, DC, REV, Work_Order, Remarks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', checkout)
                     db.commit()
                     flash('Checkout with number {} submitted successfully'.format(checkout_no))
                 except Exception as e:

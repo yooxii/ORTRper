@@ -29,7 +29,7 @@
 }
 .peek input,
 .peek select {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: "Times New Roman", Times, serif;
     align-items: center;
     text-align: center;
     padding: 0;
@@ -48,7 +48,7 @@
 }
 
 .check_btn {
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -86,4 +86,36 @@
 }
 .w150 {
     width: 180px;
+}
+
+.peek th{
+    align-items: center;
+    text-align: center;
+}
+
+.peek span {
+    display: inline-block;
+    margin: auto;
+}
+
+.arr {
+    display: inline-block;
+    width: 12px;
+}
+
+.arrUp {
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-bottom-color: #ccc;
+    cursor: pointer;
+}
+
+.arrDown {
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-top-color: #ccc;
+    margin-top: 6px;
+    cursor: pointer;
 }
