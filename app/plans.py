@@ -56,11 +56,11 @@ def import_checkouts():
         # inspect(request)
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(request.url)
+            return redirect(url_for('plans.Checkouts'))
         file = request.files['file']
         if file.filename == '':
             flash('No selected file')
-            return redirect(request.url)
+            return redirect(url_for('plans.Checkouts'))
         
         print(file.filename)
         
@@ -76,6 +76,7 @@ def import_checkouts():
                 df = df.set_axis(colNames, axis=1)
                 inspect(df)
                 df.to_sql('TCheckouts', db, if_exists='append', index=False)
+        return redirect(url_for('plans.Checkouts'))
     
     return render_template('plans/Checkouts.html', checkoutsPeek=db_checkouts, rd_or_rq='readonly')
 

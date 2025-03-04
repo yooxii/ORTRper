@@ -14,7 +14,7 @@
     </div>
     {% endif %} {% endwith %} {% if not checkouts_edit_btns %}
     <form method="post" action="{{ url_for('.import_checkouts') }}" enctype="multipart/form-data" id="uploadForm">
-        <input type="file" name="file" id="fileInput" />
+        <input type="file" name="file" title="文件选择" id="fileInput" />
         <input type="submit" class="btn btn-primary btn-pill btn-sm" id="uploadBtn" value="导入" />
     </form>
     <a href="{{ url_for('.export_checkouts') }}" class="btn btn-primary btn-pill btn-sm" title="导出到Excel文件">导出</a>
