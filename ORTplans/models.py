@@ -19,6 +19,25 @@ class TSchedule(models.Model):
     Status = models.CharField(max_length=10)
     Upload_Elab = models.BooleanField(null=True)
     Remark = models.TextField(null=True)
+    
+    def __str__(self):
+        res = ""
+        res += str(self.JobNo) + ", "
+        res += str(self.QRT) + ", "
+        res += self.Product + ", "
+        res += self.Customer + ", "
+        res += self.PartNo + ", "
+        res += self.Stage + ", "
+        res += self.TestItem + ", "
+        res += str(self.SampleSize) + ", "
+        res += str(self.TestPeriod) + ", "
+        res += self.Owner + ", "
+        res += str(self.StartDate) + ", "
+        res += str(self.EndDate) + ", "
+        res += self.Status + ", "
+        res += str(self.Upload_Elab) + ", "
+        res += self.Remark
+        return res
 
 class TCheckouts(models.Model):
     id = models.AutoField(primary_key=True)
@@ -33,3 +52,18 @@ class TCheckouts(models.Model):
     Work_Order = models.CharField(max_length=40)
     Remarks = models.TextField(null=True)
     checkout_status = models.CharField(max_length=20, null=True)
+    
+    def __str__(self):
+        res = ""
+        res += str(self.checkout_date) + ", "
+        res += self.checkout_no + ", "
+        res += self.PartNo + ", "
+        res += self.TestItem + ", "
+        res += str(self.checkout_qty) + ", "
+        res += self.SN + ", "
+        res += self.DC + ", "
+        res += self.REV + ", "
+        res += self.Work_Order + ", "
+        res += self.Remarks + ", "
+        res += self.checkout_status
+        return res
