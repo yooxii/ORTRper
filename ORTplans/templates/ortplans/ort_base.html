@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta charset="UTF-8" />
+<title>{% block title %}首页{% endblock title %}</title>
+
+<head>
+    <!-- <title>ORT报告工作站</title> -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/lazy.css' %}" />
+    <link rel="stylesheet" href="{% static 'ortplans/index.css' %}" />
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</head>
+
+<body>
+    <header>
+        {% block header %}
+        <h1>ORT报告工作站</h1>
+        <div>
+            <p>ORT报告工作站，为您提供报告、审查、反馈等服务。</p>
+        </div>
+        {% endblock header %}
+    </header>
+    <main>
+        <nav>
+            <ul>
+                <hr />
+                <li>
+                    <div>
+                        <a class="head" id="head_plan"><img src="{% static 'ortplans/icon/jihua.svg' %}"
+                                alt="计划" /><span>计划</span></a>
+                        <a href="{% url 'checkouts' %}" class="show"><img src="{% static 'ortplans/icon/icn_wuzilingtuiliaochaxun.svg' %}"
+                                alt="领用" /><span>领用</span></a>
+                        <a href="" class="show"><img src="{% static 'ortplans/icon/paicheng.svg' %}"
+                                alt="排程" /><span>排程</span></a>
+                    </div>
+                </li>
+                <hr />
+                <li>
+                    <div>
+                        <a class="head" id="report"><img src="{% static 'ortplans/icon/baogao.svg' %}"
+                                alt="报告" /><span>报告</span></a>
+                        <a href="" class="show"><img src="{% static 'ortplans/icon/amz.svg' %}"
+                                alt="AMZ" /><span>AMZ</span></a>
+                        <a href="" class="show"><img src="{% static 'ortplans/icon/a-mxburn.svg' %}"
+                                alt="EMI@168" /><span>EMI&amp;168</span></a>
+                    </div>
+                </li>
+                <hr />
+                <li>
+                    <a class="head" href=""><img src="{% static 'ortplans/icon/sousuo_1.svg' %}"
+                            alt="审查" /><span>审查</span></a>
+                </li>
+                <hr />
+                <li>
+                    <a class="head" href="}"><img src="{% static 'ortplans/icon/fankui_1.svg' %}"
+                            alt="反馈" /><span>反馈</span></a>
+                </li>
+                <hr />
+                <li>
+                    <a class="head" href=""><img src="{% static 'ortplans/icon/bangzhu_3.svg' %}"
+                            alt="帮助" /><span>帮助</span></a>
+                </li>
+                <hr />
+            </ul>
+        </nav>
+        <div class="container_content" id="container">{% block content %} {% endblock content %} {% block right_peek %}
+            {% endblock right_peek %}</div>
+    </main>
+    <footer>
+        <p>版权所有 © 2025 ORT报告工作站</p>
+    </footer>
+    <script src="{% static 'ortplans/index.js' %}"></script>
+</body>
+
+</html>
