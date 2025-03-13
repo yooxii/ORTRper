@@ -1,10 +1,10 @@
-{% extends "plans/checkouts.html" %}
+{% extends "ortplans/checkouts.html" %}
 
 {% block checkouts_edit_btns %}
 <input type="button" class="btn btn-primary btn-pill btn-sm" onclick="addRow()" value="+" title="添加新行">
 <input type="button" class="btn btn-primary btn-pill btn-sm" onclick="triggerDel()" value="删除选中行" title="删除选中行">
 <input type="submit" class="btn btn-primary btn-pill btn-sm" value="提交" title="提交">
-<a href="{{ url_for('.Checkouts') }}" class="btn btn-secondary btn-pill btn-sm" title="返回">返回</a>
+<a href="{% url 'checkouts' %}" class="btn btn-secondary btn-pill btn-sm" title="返回">返回</a>
 {% endblock checkouts_edit_btns %}
 
 {% block checkouts_edit_checkbox %}
@@ -43,7 +43,7 @@
             cell2.innerHTML = '<input type="text" name="checkout_no" class="w100 form-control" required>';
             cell3.innerHTML = '<input type="text" name="PartNo" class="w100 form-control" required>';
             cell4.innerHTML = '<input type="number" name="checkout_qty" class="w30 form-control" required>';
-            cell5.innerHTML = "<select name='TestItem' title='测试项目' class='w100 form-control' required>\n{% for item in testItems %}\n<option value='{{ item['TI'] }}'>{{ item['TI'] }}</option>\n{% endfor %}\n</select>";
+            cell5.innerHTML = "<select name='TestItem' title='测试项目' class='w100 form-control' required>\n{% for item in testItems %}\n<option value='{{ item.TI }}'>{{ item.TI }}</option>\n{% endfor %}\n</select>";
             cell6.innerHTML = '<textarea name="SN" class="w150" required></textarea>';
             cell7.innerHTML = '<input type="week" class="form-control" name="DC" required>';
             cell8.innerHTML = '<input type="text" name="REV" class="w30 form-control" required>';
@@ -108,7 +108,7 @@
             }
 
             // 发送请求删除数据库中的数据
-            fetch('{{ url_for(".delete") }}', {
+            fetch('{% url "delete_checkouts" %}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -120,7 +120,7 @@
     }
 
     function toggleAll(checkbox) {
-        var table = document.getElementById("checkouts_table");
+        var table = document.getElementById("_table");
         var checkboxes = table.querySelectorAll('input[type="checkbox"]');
 
         checkboxes.forEach(function (checkbox) {
