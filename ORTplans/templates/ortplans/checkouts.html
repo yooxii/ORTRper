@@ -1,7 +1,7 @@
 {% extends "ortplans/ort_base.html" %} {% block header %} {% load static %}
 <h1>{% block title %}领用{% endblock title %}</h1>
 {% endblock header %} {% block content %}
-<link rel="stylesheet" href="{% static 'css/checkouts.css' %}" />
+<!-- <link rel="stylesheet" href="{% static 'css/checkouts.css' %}" /> -->
 <div class="peek">
     <h3>领用信息</h3>
     {% if messages %}
@@ -14,8 +14,15 @@
     </div>
     {% endif %} {% if not checkouts_edit_btns %}
     <form method="post" action="{% url 'import_checkouts' %}" enctype="multipart/form-data" id="uploadForm">
-        <input type="file" name="file" title="文件选择" id="fileInput" />
-        <input type="submit" class="btn btn-primary btn-pill btn-sm" id="uploadBtn" value="导入" />
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="submit" id="uploadBtn">导入</button>
+            </div>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="fileInput">
+                <label class="custom-file-label" for="fileInput">选择文件</label>
+            </div>
+        </div>
     </form>
     <a href="{% url 'export_checkouts' %}" class="btn btn-primary btn-pill btn-sm" title="导出到Excel文件">导出</a>
     {% endif %}
@@ -23,128 +30,44 @@
         {% block checkouts_edit_btns %}
         <a href="{% url 'edit_checkouts' %}" class="btn btn-primary btn-pill btn-sm" title="编辑">编辑</a>
         {% endblock checkouts_edit_btns %}
-        <table id="checkouts_table" name="checkouts_peek" title="领用信息">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0)">
-                        <span>NO.</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(1)">
-                        <span>领用日期</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(2)">
-                        <span>领用单号</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(3)">
-                        <span>机种名称</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(4)">
-                        <span>数量</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(5)">
-                        <span>测试项目</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(6)">
-                        <span>序列号</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(7)">
-                        <span>周期</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(8)">
-                        <span>版本</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(9)">
-                        <span>工令</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                    <th onclick="sortTable(10)">
-                        <span>备注</span>
-                        <div class="arr">
-                            <div class="arrUp"></div>
-                            <div class="arrDown"></div>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek" title="领用信息">
+                <thead class="thead-dark">
+                    <tr>
+                        <th> <span>NO.</span> </th>
+                        <th> <span>领用日期</span> </th>
+                        <th> <span>领用单号</span> </th>
+                        <th> <span>机种名称</span> </th>
+                        <th> <span>数量</span> </th>
+                        <th> <span>测试项目</span> </th>
+                        <th> <span>序列号</span> </th>
+                        <th> <span>周期</span> </th>
+                        <th> <span>版本</span> </th>
+                        <th> <span>工令</span> </th>
+                        <th> <span>备注</span> </th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                {% for checkout in all_checkouts %}
-                <tr>
-                    {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
-                    <td>
-                        <input type="text" name="checkout_id" class="w30" value="{{ checkout.id }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="date" name="checkout_date" class="w100" value="{{ checkout.checkout_date }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="text" name="checkout_no" class="w100" value="{{ checkout.checkout_no }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="text" name="PartNo" class="w100" value="{{ checkout.PartNo }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="number" name="checkout_qty" class="w30" value="{{ checkout.checkout_qty }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="text" name="TestItem" class="w100" value="{{ checkout.TestItem }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <textarea name="SN" class="w150" {{ rd_or_rq }}>{{ checkout.SN }}</textarea>
-                    </td>
-                    <td>
-                        <input type="week" name="DC" value="{{ checkout.DC }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="text" name="REV" class="w30" value="{{ checkout.REV }}" {{ rd_or_rq }} />
-                    </td>
-                    <td>
-                        <input type="text" name="Work_Order" class="w150" value="{{ checkout.Work_Order }}" {{ rd_or_rq }} />
-                    </td>
-                    <td><textarea name="Remarks">{{ checkout.Remarks }}</textarea></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                <tbody>
+                    {% for checkout in all_checkouts %}
+                    <tr>
+                        {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
+                        <td> {{ checkout.id }} </td>
+                        <td> {{ checkout.checkout_date }} </td>
+                        <td> {{ checkout.checkout_no }} </td>
+                        <td> {{ checkout.PartNo }} </td>
+                        <td> {{ checkout.checkout_qty }} </td>
+                        <td> {{ checkout.TestItem }} </td>
+                        <td> {{ checkout.SN }} </td>
+                        <td> {{ checkout.DC }} </td>
+                        <td> {{ checkout.REV }} </td>
+                        <td> {{ checkout.Work_Order }} </td>
+                        <td> {{ checkout.Remarks }} </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </form>
 </div>
 
