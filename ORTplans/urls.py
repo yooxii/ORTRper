@@ -1,4 +1,6 @@
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 
 from . import views
 
@@ -10,3 +12,4 @@ urlpatterns = [
     path("edit_checkouts", views.edit_checkouts, name="edit_checkouts"),
     path("delete_checkouts", views.delete_checkouts, name="delete_checkouts"),
 ]
+urlpatterns += staticfiles_urlpatterns()

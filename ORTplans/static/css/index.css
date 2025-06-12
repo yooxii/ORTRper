@@ -1,3 +1,4 @@
+/* 
 body {
     font-family: Arial, sans-serif;
     background-color: #211e1e;
@@ -16,7 +17,6 @@ header h1 {
     font-size: xx-large;
     color: white;
 }
-
 nav {
     position: sticky;
     height: fit-content;
@@ -98,20 +98,6 @@ nav a.active {
     border-radius: 0;
 }
 
-nav img {
-    /* 禁用鼠标选择 */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /* 图片居中 */
-    display: block;
-    margin: 0 auto;
-    /* 图片大小 */
-    width: 30px;
-    height: 30px;
-}
-
 nav span {
     font-size: 14px;
     margin-top: 5px;
@@ -163,4 +149,17 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0;
+}
+
+*/
+
+nav img {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: block;
+    margin: 0 auto;
+    width: 30px;
+    height: 30px;
 }

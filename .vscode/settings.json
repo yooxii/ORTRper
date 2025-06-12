@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "1",
+            "database": "${workspaceFolder:ORTRper-dja}/db.sqlite3"
+        }
+    ],
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
+    "html.format.templating": true
+}

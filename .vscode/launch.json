@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Python 调试程序: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "runserver",
+                "8080"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}\\manage.py"
+        }
+    ]
+}
