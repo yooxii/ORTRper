@@ -61,7 +61,7 @@
 
                 <tbody>
                     {% for checkout in all_checkouts %}
-                    <tr>
+                    <tr data-checkout-id="{{ checkout.id }}">
                         {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
                         <td> {{ checkout.id }} </td>
                         <td> {{ checkout.checkout_date }} </td>
@@ -83,14 +83,27 @@
 </div>
 {% block checkouts_edit_script %} {% endblock checkouts_edit_script %}
 <div class="list-group" id="checkouts-menu">
-    <a class="list-group-item list-group-item-action">编辑</a>
-    <a class="list-group-item list-group-item-action">删除</a>
-    <a class="list-group-item list-group-item-action">下载</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'add_checkouts' %}">添加</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'edit_checkouts' %}">编辑</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'delete_checkouts' %}">删除</a>
 </div>
 
 <script>
-    $(document).on("contextmenu", function (event) {
+    $(document).on("contextmenu", "#checkouts_table tbody tr", function (event) {
         event.preventDefault();
+
+        // 获取当前行的ID
+        var checkoutId = $(this).data('checkout-id');
+        console.log(checkoutId);
+
+        // 设置右键菜单项的链接
+        $("#checkouts-menu a").each(function () {
+            var href = $(this).attr("href");
+            if (!href) return;
+            href = href.split("?")[0]
+            var updatedHref = href.includes("?") ? href : href + "?checkout_id=" + checkoutId;
+            $(this).attr("href", updatedHref);
+        });
 
         // 在鼠标点击的位置显示自定义右键菜单
         $("#checkouts-menu").css({

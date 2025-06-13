@@ -19,49 +19,50 @@
     </style>
 </head>
 
-<body class="container-fluid">
+<body>
     <main>
-        <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                          aria-expanded="false"><img src="{% static 'img/icon/jihua.svg' %}" alt="计划" /><span>计划</span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'checkouts' %}"><img src="{% static 'img/icon/icn_wuzilingtuiliaochaxun.svg' %}"
-                                  alt="领用" /><span>领用</span></a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href=""><img src="{% static 'img/icon/paicheng.svg' %}" alt="排程" /><span>排程</span></a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                          aria-expanded="false"><img src="{% static 'img/icon/baogao.svg' %}" alt="报告" /><span>报告</span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href=""><img src="{% static 'img/icon/amz.svg' %}" alt="AMZ" /><span>AMZ</span></a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href=""><img src="{% static 'img/icon/a-mxburn.svg' %}" alt="EMI@168" /><span>EMI&amp;168</span></a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href=""><img src="{% static 'img/icon/sousuo_1.svg' %}" alt="审查" /><span>审查</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="}"><img src="{% static 'img/icon/fankui_1.svg' %}" alt="反馈" /><span>反馈</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href=""><img src="{% static 'img/icon/bangzhu_3.svg' %}" alt="帮助" /><span>帮助</span></a>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div>
-        </nav>
-        <!-- <header>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false"><img src="{% static 'img/icon/jihua.svg' %}" alt="计划" /><span>计划</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'checkouts' %}"><img src="{% static 'img/icon/icn_wuzilingtuiliaochaxun.svg' %}"
+                                      alt="领用" /><span>领用</span></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href=""><img src="{% static 'img/icon/paicheng.svg' %}" alt="排程" /><span>排程</span></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false"><img src="{% static 'img/icon/baogao.svg' %}" alt="报告" /><span>报告</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href=""><img src="{% static 'img/icon/amz.svg' %}" alt="AMZ" /><span>AMZ</span></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href=""><img src="{% static 'img/icon/a-mxburn.svg' %}" alt="EMI@168" /><span>EMI&amp;168</span></a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href=""><img src="{% static 'img/icon/sousuo_1.svg' %}" alt="审查" /><span>审查</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="}"><img src="{% static 'img/icon/fankui_1.svg' %}" alt="反馈" /><span>反馈</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href=""><img src="{% static 'img/icon/bangzhu_3.svg' %}" alt="帮助" /><span>帮助</span></a>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+            </nav>
+            <!-- <header>
             {% block header %}
             <h1>ORT报告工作站</h1>
             <div>
@@ -69,10 +70,11 @@
             </div>
             {% endblock header %}
         </header> -->
-        <div class="container_content" id="container">{% block content %} {% endblock content %} {% block right_peek %} {% endblock right_peek %}</div>
+            <div class="container_content" id="container">{% block content %} {% endblock content %} {% block right_peek %} {% endblock right_peek %}</div>
+        </div>
     </main>
-    <footer>
-        <p>版权所有 © 2025 ORT报告工作站</p>
+    <footer class="container">
+        <p class="fixed-bottom d-flex justify-content-center">版权所有 © 2025 ORT报告工作站</p>
     </footer>
     <script src="{% static 'js/index.js' %}"></script>
 </body>

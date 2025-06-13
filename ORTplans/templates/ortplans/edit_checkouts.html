@@ -1,132 +1,56 @@
-{% extends "ortplans/checkouts.html" %}
+{% extends "ortplans/ort_base.html" %}
 
-{% block checkouts_edit_btns %}
-<input type="button" class="btn btn-primary btn-pill btn-sm" onclick="addRow()" value="+" title="添加新行">
-<input type="button" class="btn btn-primary btn-pill btn-sm" onclick="triggerDel()" value="删除选中行" title="删除选中行">
-<input type="submit" class="btn btn-primary btn-pill btn-sm" value="提交" title="提交">
-<a href="{% url 'checkouts' %}" class="btn btn-secondary btn-pill btn-sm" title="返回">返回</a>
-{% endblock checkouts_edit_btns %}
+{% block header %}{% load static %}<h1>{% block title %}领用编辑{% endblock title %}</h1>{% endblock header %}
 
-{% block checkouts_edit_checkbox %}
-<td><a href="javascript:void(0)" class="btn btn-light btn-sm" id="toggleAll" onclick="toggleAll(this)" title="反选">反选</a></td>
-{% endblock checkouts_edit_checkbox %}
-
-{% block checkouts_edit_checkbox_input %}
-<td><input type="checkbox" class="check_btn" name="checkout_id"></td>
-{% endblock checkouts_edit_checkbox_input %}
-
-{% block header %}
-<h1>{% block title %}领用{% endblock title %}</h1>
-{% endblock header %}
-
-{% block checkouts_edit_script %}
-<script>
-    function addRow() {
-        var table = document.getElementsByTagName("table")[0];
-
-        if (table.rows.length === 1) {
-            // 如果表格没有行，则插入新的行并添加元素
-            var row = table.insertRow(1);
-            var cell0 = row.insertCell(0);
-            var cell1 = row.insertCell(1);
-            var cell2 = row.insertCell(2);
-            var cell3 = row.insertCell(3);
-            var cell4 = row.insertCell(4);
-            var cell5 = row.insertCell(5);
-            var cell6 = row.insertCell(6);
-            var cell7 = row.insertCell(7);
-            var cell8 = row.insertCell(8);
-            var cell9 = row.insertCell(9);
-            var cell10 = row.insertCell(10);
-            cell0.innerHTML = '<input type="checkbox" class="check_btn" name="checkout_id">';
-            cell1.innerHTML = '<input type="date" name="checkout_date" class="w100 form-control" required>';
-            cell2.innerHTML = '<input type="text" name="checkout_no" class="w100 form-control" required>';
-            cell3.innerHTML = '<input type="text" name="PartNo" class="w100 form-control" required>';
-            cell4.innerHTML = '<input type="number" name="checkout_qty" class="w30 form-control" required>';
-            cell5.innerHTML = "<select name='TestItem' title='测试项目' class='w100 form-control' required>\n{% for item in testItems %}\n<option value='{{ item.TI }}'>{{ item.TI }}</option>\n{% endfor %}\n</select>";
-            cell6.innerHTML = '<textarea name="SN" class="w150" required></textarea>';
-            cell7.innerHTML = '<input type="week" class="form-control" name="DC" required>';
-            cell8.innerHTML = '<input type="text" name="REV" class="w30 form-control" required>';
-            cell9.innerHTML = '<input type="text" name="Work_Order" class="w150 form-control" required>';
-            cell10.innerHTML = '<textarea name="Remarks"></textarea>';
-        } else {
-            // 如果表格有行，则复制最后一行
-            var lastRow = table.rows[table.rows.length - 1];
-            var newRow = table.insertRow(table.rows.length);
-
-            for (var i = 0; i < lastRow.cells.length; i++) {
-                var newCell = newRow.insertCell(i);
-                newCell.innerHTML = lastRow.cells[i].innerHTML;
-            }
-
-            // 清空新行的输入值
-            var inputs = newRow.getElementsByTagName("input");
-            var textareas = newRow.getElementsByTagName("textarea");
-
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].type === "button") {
-                    continue;
-                }
-                inputs[i].value = "";
-            }
-
-            for (var i = 0; i < textareas.length; i++) {
-                textareas[i].value = "";
-            }
-        }
-    }
-
-    function triggerDel() {
-        const table = document.getElementById("checkouts_table");
-        const checkboxes = table.querySelectorAll('input[type="checkbox"]:checked');
-
-        if (checkboxes.length === 0) {
-            console.warn("请选择要删除的行");
-            return;
-        }
-
-        checkboxes.forEach(checkbox => {
-            const row = checkbox.parentNode.parentNode;
-            const checkoutNoInput = row.querySelector('input[name="checkout_no"]');
-            const checkoutPn = row.querySelector('input[name="PartNo"]').value;
-            const checkoutDate = row.querySelector('input[name="checkout_date"]').value;
-            const workOrder = row.querySelector('input[name="Work_Order"]').value;
-
-            if (!checkoutNoInput) {
-                console.error("无法找到领用单号输入框");
-                return;
-            }
-
-            const checkoutNo = checkoutNoInput.value;
-            console.log(`删除行 (Checkout No: ${checkoutNo})`);
-
-            // 提示用户确认删除，如果为单号为空则不提示
-            if (!(checkoutNo === "")) {
-                if (!confirm(`确认删除行"${checkoutNo}-${checkoutPn}-${checkoutDate}-${workOrder}"吗？`)) {
-                    return;
-                }
-            }
-
-            // 发送请求删除数据库中的数据
-            fetch('{% url "delete_checkouts" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `checkout_no=${checkoutNo}`
-            });
-            row.parentNode.removeChild(row);
-        });
-    }
-
-    function toggleAll(checkbox) {
-        var table = document.getElementById("_table");
-        var checkboxes = table.querySelectorAll('input[type="checkbox"]');
-
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = checkbox.checked ? false : true;
-        });
-    }
-
-</script>
-{% endblock checkouts_edit_script %}
+{% block content %}
+<form method="post" action="{% url 'save_edit_checkouts'%}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-3" hidden>
+            <label for="checkout_id">NO.</label>
+            <input type="text" class="form-control" name="checkout_id" value="{{ checkout.id }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="checkout_no">领用单号</label>
+            <input type="text" class="form-control" name="checkout_no" value="{{ checkout.checkout_no }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="PartNo">机种名称</label>
+            <input type="text" class="form-control" name="PartNo" value="{{ checkout.PartNo }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="checkout_date">日期</label>
+            <input type="date" class="form-control" name="checkout_date" value="{{ checkout.checkout_date }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="DC">周期</label>
+            <input type="text" class="form-control" name="DC" value="{{ checkout.DC }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="checkout_qty">数量</label>
+            <input type="text" class="form-control" name="checkout_qty" value="{{ checkout.checkout_qty }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="REV">版本</label>
+            <input type="text" class="form-control" name="REV" value="{{ checkout.REV }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="Work_Order">工令</label>
+            <input type="text" class="form-control" name="Work_Order" value="{{ checkout.Work_Order }}">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="TestItem">测试项目</label>
+            <input type="text" class="form-control" name="TestItem" value="{{ checkout.TestItem }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="SN">序列号</label>
+        <textarea class="form-control" name="SN" placeholder="序列号">{{ checkout.SN }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="Remarks">备注</label>
+        <textarea class="form-control" name="Remarks" placeholder="备注">{{ checkout.Remarks }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">保存</button>
+</form>
+{% endblock content %}
