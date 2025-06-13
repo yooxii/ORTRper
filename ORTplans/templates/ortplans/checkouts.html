@@ -1,6 +1,18 @@
-{% extends "ortplans/ort_base.html" %} {% block header %} {% load static %}
-<h1>{% block title %}领用{% endblock title %}</h1>
-{% endblock header %} {% block content %}
+{% extends "ortplans/ort_base.html" %}
+
+{% block header %}{% load static %}<h1>{% block title %}领用{% endblock title %}</h1>{% endblock header %}
+
+{% block content %}
+<style>
+    #checkouts-menu {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        min-width: 120px;
+        z-index: 1;
+    }
+</style>
 <!-- <link rel="stylesheet" href="{% static 'css/checkouts.css' %}" /> -->
 <div class="peek">
     <h3>领用信息</h3>
@@ -14,22 +26,21 @@
     </div>
     {% endif %} {% if not checkouts_edit_btns %}
     <form method="post" action="{% url 'import_checkouts' %}" enctype="multipart/form-data" id="uploadForm">
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 w-50">
             <div class="input-group-prepend">
                 <button class="btn btn-outline-secondary" type="submit" id="uploadBtn">导入</button>
             </div>
+            <a href="{% url 'export_checkouts' %}" class="btn btn-outline-primary" title="导出到Excel文件">导出</a>
             <div class="custom-file">
                 <input type="file" class="custom-file-input" id="fileInput">
                 <label class="custom-file-label" for="fileInput">选择文件</label>
             </div>
         </div>
     </form>
-    <a href="{% url 'export_checkouts' %}" class="btn btn-primary btn-pill btn-sm" title="导出到Excel文件">导出</a>
+    <!-- <a href="{% url 'edit_checkouts' %}" class="btn btn-outline-secondary" title="编辑">编辑</a> -->
     {% endif %}
     <form method="post" action="{% url 'edit_checkouts' %}">
-        {% block checkouts_edit_btns %}
-        <a href="{% url 'edit_checkouts' %}" class="btn btn-primary btn-pill btn-sm" title="编辑">编辑</a>
-        {% endblock checkouts_edit_btns %}
+        {% block checkouts_edit_btns %} {% endblock checkouts_edit_btns %}
         <div class="table-responsive">
             <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek" title="领用信息">
                 <thead class="thead-dark">
@@ -70,89 +81,28 @@
         </div>
     </form>
 </div>
-
 {% block checkouts_edit_script %} {% endblock checkouts_edit_script %}
+<div class="list-group" id="checkouts-menu">
+    <a class="list-group-item list-group-item-action">编辑</a>
+    <a class="list-group-item list-group-item-action">删除</a>
+    <a class="list-group-item list-group-item-action">下载</a>
+</div>
+
 <script>
-    function handleFileSelect() {
-        var fileInput = document.getElementById('fileInput');
-        fileInput.click();
-        while (!fileInput.value) {
-            continue;
-        }
-        return true;
-    }
-    function sortTable(n) {
-        var table = document.getElementById('checkouts_table'),
-            rows,
-            switching = true,
-            i,
-            x,
-            y,
-            shouldSwitch,
-            dir = 'asc',
-            switchcount = 0;
+    $(document).on("contextmenu", function (event) {
+        event.preventDefault();
 
-        while (switching) {
-            switching = false;
-            rows = table.rows;
+        // 在鼠标点击的位置显示自定义右键菜单
+        $("#checkouts-menu").css({
+            top: event.clientY,
+            left: event.clientX
+        }).show();
+    });
 
-            for (i = 1; i < rows.length - 1; i++) {
-                shouldSwitch = false;
-                x = rows[i].getElementsByTagName('TD')[n].getElementsByTagName('input')[0].value;
-                y = rows[i + 1].getElementsByTagName('TD')[n].getElementsByTagName('input')[0].value;
+    $(document).on("click", function () {
+        // 隐藏自定义右键菜单
+        $("#checkouts-menu").hide();
+    });
 
-                var x_v = parseInt(x, 10);
-                var x_type = rows[i].getElementsByTagName('TD')[n].getElementsByTagName('input')[0].type;
-                var y_v = parseInt(y, 10);
-
-                if (isNaN(x_v) || x_type == 'date') {
-                    if (dir == 'asc') {
-                        if (x.toLowerCase() > y.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else if (dir == 'desc') {
-                        if (x.toLowerCase() < y.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                } else {
-                    if (dir == 'asc') {
-                        if (x_v > y_v) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    } else if (dir == 'desc') {
-                        if (x_v < y_v) {
-                            shouldSwitch = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (shouldSwitch) {
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-                switchcount++;
-            } else {
-                if (switchcount == 0 && dir == 'asc') {
-                    dir = 'desc';
-                    switching = true;
-                }
-            }
-        }
-
-        // 更新箭头的显示样式
-        $('.arrUp').on('click', function () {
-            $(this).css('border-bottom-color', '#b2b2b2');
-            $('.arrDown').css('border-top-color', '#ccc');
-        });
-        $('.arrDown').on('click', function () {
-            $(this).css('border-top-color', '#b2b2b2');
-            $('.arrUp').css('border-bottom-color', '#ccc');
-        });
-    }
 </script>
 {% endblock content %}
