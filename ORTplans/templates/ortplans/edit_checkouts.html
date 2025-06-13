@@ -3,6 +3,15 @@
 {% block header %}{% load static %}<h1>{% block title %}领用编辑{% endblock title %}</h1>{% endblock header %}
 
 {% block content %}
+{% if error %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert" id="flashes">
+    {% for message in error %} {{ message }}<br />
+    {% endfor %}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
 <form method="post" action="{% url 'save_edit_checkouts'%}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-row">

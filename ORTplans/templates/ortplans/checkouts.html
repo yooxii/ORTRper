@@ -16,15 +16,7 @@
 <!-- <link rel="stylesheet" href="{% static 'css/checkouts.css' %}" /> -->
 <div class="peek">
     <h3>领用信息</h3>
-    {% if messages %}
-    <div class="flashes alert alert-success alert-dismissible fade show" role="alert" id="flashes">
-        <button type="button" class="close" style="position: absolute; top: calc(50% - 24px)" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        {% for message in messages %} {{ message }}<br />
-        {% endfor %}
-    </div>
-    {% endif %} {% if not checkouts_edit_btns %}
+    {% if not checkouts_edit_btns %}
     <form method="post" action="{% url 'import_checkouts' %}" enctype="multipart/form-data" id="uploadForm">
         <div class="input-group mb-3 w-50">
             <div class="input-group-prepend">
@@ -42,12 +34,12 @@
     <form method="post" action="{% url 'edit_checkouts' %}">
         {% block checkouts_edit_btns %} {% endblock checkouts_edit_btns %}
         <div class="table-responsive">
-            <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek" title="领用信息">
+            <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek">
                 <thead class="thead-dark">
                     <tr>
-                        <th> <span>NO.</span> </th>
-                        <th> <span>领用日期</span> </th>
+                        <!-- <th> <span>NO.</span> </th> -->
                         <th> <span>领用单号</span> </th>
+                        <th> <span>领用日期</span> </th>
                         <th> <span>机种名称</span> </th>
                         <th> <span>数量</span> </th>
                         <th> <span>测试项目</span> </th>
@@ -63,9 +55,9 @@
                     {% for checkout in all_checkouts %}
                     <tr data-checkout-id="{{ checkout.id }}">
                         {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
-                        <td> {{ checkout.id }} </td>
-                        <td> {{ checkout.checkout_date }} </td>
+                        <!-- <td> {{ checkout.id }} </td> -->
                         <td> {{ checkout.checkout_no }} </td>
+                        <td> {{ checkout.checkout_date }} </td>
                         <td> {{ checkout.PartNo }} </td>
                         <td> {{ checkout.checkout_qty }} </td>
                         <td> {{ checkout.TestItem }} </td>

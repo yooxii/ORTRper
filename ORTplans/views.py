@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from ORTplans.models import TCheckouts
@@ -33,7 +33,10 @@ def export_checkouts(request):
 def edit_checkouts(request):
     # inspect(request.GET)
     if request.method == "GET":
-        checkout = TCheckouts.objects.filter(id=request.GET.get("checkout_id"))
+        id = request.GET.get("checkout_id")
+        if id == "0":
+            return add_checkouts(request)
+        checkout = TCheckouts.objects.filter(id=id)
         data = checkout.values()[0]
         data["checkout_date"] = str(data["checkout_date"])
         context = {
@@ -76,39 +79,42 @@ def save_edit_checkouts(request):
         Work_Order = request.POST.get("Work_Order")
         Remarks = request.POST.get("Remarks")
 
-        cur = TCheckouts.objects.filter(id=checkout_id)
-        if cur.exists():
-            # 更新现有记录
-            checkout, created = TCheckouts.objects.update_or_create(
-                id=checkout_id,
-                defaults={
-                    "checkout_date": checkout_date,
-                    "checkout_no": checkout_no,
-                    "PartNo": PartNo,
-                    "checkout_qty": checkout_qty,
-                    "TestItem": TestItem,
-                    "SN": sn,
-                    "DC": dc,
-                    "REV": rev,
-                    "Work_Order": Work_Order,
-                    "Remarks": Remarks,
-                },
-            )
-        else:
-            # 插入新记录
-            checkout = TCheckouts(
-                checkout_date=checkout_date,
-                checkout_no=checkout_no,
-                PartNo=PartNo,
-                checkout_qty=checkout_qty,
-                TestItem=TestItem,
-                SN=sn,
-                DC=dc,
-                REV=rev,
-                Work_Order=Work_Order,
-                Remarks=Remarks,
-            )
-            checkout.save()
+        try:
+            cur = TCheckouts.objects.filter(id=checkout_id)
+            if cur.exists():
+                # 更新现有记录
+                checkout, created = TCheckouts.objects.update_or_create(
+                    id=checkout_id,
+                    defaults={
+                        "checkout_date": checkout_date,
+                        "checkout_no": checkout_no,
+                        "PartNo": PartNo,
+                        "checkout_qty": checkout_qty,
+                        "TestItem": TestItem,
+                        "SN": sn,
+                        "DC": dc,
+                        "REV": rev,
+                        "Work_Order": Work_Order,
+                        "Remarks": Remarks,
+                    },
+                )
+            else:
+                # 插入新记录
+                checkout = TCheckouts(
+                    checkout_date=checkout_date,
+                    checkout_no=checkout_no,
+                    PartNo=PartNo,
+                    checkout_qty=checkout_qty,
+                    TestItem=TestItem,
+                    SN=sn,
+                    DC=dc,
+                    REV=rev,
+                    Work_Order=Work_Order,
+                    Remarks=Remarks,
+                )
+                checkout.save()
+        except Exception as e:
+            return redirect("/ortplans/edit_checkouts?checkout_id=" + checkout_id)
     return checkouts(request)
 
 
