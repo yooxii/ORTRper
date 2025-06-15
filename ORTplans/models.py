@@ -3,48 +3,72 @@ from django.db import models
 
 class TSchedule(models.Model):
     id = models.AutoField(primary_key=True)
-    JobNo = models.IntegerField()
-    QRT = models.BooleanField(default=False)
-    Product = models.CharField(max_length=25)
-    Customer = models.CharField(max_length=15)
-    PartNo = models.CharField(max_length=25)
-    Stage = models.CharField(max_length=5)
-    TestItem = models.CharField(max_length=50)
-    SampleSize = models.IntegerField()
-    TestPeriod = models.IntegerField()
-    Owner = models.CharField(max_length=50)
-    StartDate = models.DateField()
-    EndDate = models.DateField()
-    Status = models.CharField(max_length=10)
-    Upload_Elab = models.BooleanField(null=True, blank=True)
-    Remark = models.TextField(null=True, blank=True)
+    JobNo = models.CharField(verbose_name="工作编号", max_length=20, unique=True)
+    QRT = models.BooleanField(
+        verbose_name="送测", default=False, choices=((False, "领用"), (True, "送测"))
+    )
+    Product = models.CharField(verbose_name="产品别", max_length=25)
+    Customer = models.CharField(verbose_name="客户别", max_length=15)
+    PartNo = models.CharField(verbose_name="机种名", max_length=25)
+    Stage = models.IntegerField(
+        verbose_name="阶段",
+        default=1,
+        choices=((1, "MP"), (2, "MVT"), (3, "DVT"), (4, "EVT")),
+    )
+    TestItem = models.CharField(verbose_name="测试项目", max_length=50)
+    SampleSize = models.IntegerField(
+        verbose_name="样品数",
+    )
+    TestPeriod = models.IntegerField(
+        verbose_name="试验时间",
+    )
+    Owner = models.CharField(verbose_name="负责人", max_length=50)
+    StartDate = models.DateField(
+        verbose_name="开始日期",
+    )
+    EndDate = models.DateField(verbose_name="结束日期", null=True, blank=True)
+    Status = models.IntegerField(
+        verbose_name="完成状态",
+        default=1,
+        choices=((1, "Ongoing"), (2, "Close"), (3, "Pending")),
+    )
+    Upload_Elab = models.BooleanField(
+        verbose_name="上传系统",
+        null=True,
+        blank=True,
+        default=False,
+        choices=((False, "未上传"), (True, "已上传")),
+    )
+    Remark = models.TextField(verbose_name="备注", null=True, blank=True)
 
     def __str__(self):
-        return (
-            f"{self.JobNo}, {self.QRT}, {self.Product}, {self.Customer}, "
-            f"{self.PartNo}, {self.Stage}, {self.TestItem}, {self.SampleSize}, "
-            f"{self.TestPeriod}, {self.Owner}, {self.StartDate}, "
-            f"{self.EndDate}, {self.Status}, {self.Upload_Elab}, {self.Remark}"
-        )
+        return self.JobNo
 
 
 class TCheckouts(models.Model):
     id = models.AutoField(primary_key=True)
-    checkout_date = models.DateField()
-    checkout_no = models.CharField(max_length=20)
-    PartNo = models.CharField(max_length=15)
-    TestItem = models.CharField(max_length=50, null=True, blank=True)
-    checkout_qty = models.IntegerField()
-    SN = models.TextField(unique=True)
-    DC = models.CharField(max_length=8)
-    REV = models.CharField(max_length=10)
-    Work_Order = models.CharField(max_length=40)
-    Remarks = models.TextField(null=True, blank=True)
-    checkout_status = models.CharField(max_length=20, null=True, blank=True)
+    checkout_date = models.DateField(
+        verbose_name="领用日期",
+    )
+    checkout_no = models.CharField(verbose_name="领用单号", max_length=20, unique=True)
+    PartNo = models.CharField(verbose_name="机种名称", max_length=15)
+    TestItem = models.CharField(
+        verbose_name="测试项目", max_length=50, null=True, blank=True
+    )
+    checkout_qty = models.IntegerField(
+        verbose_name="领出数量",
+    )
+    SN = models.TextField(verbose_name="序列号", unique=True)
+    DC = models.CharField(verbose_name="周期", max_length=8)
+    REV = models.CharField(verbose_name="版本", max_length=10)
+    Work_Order = models.CharField(verbose_name="工令", max_length=40)
+    Remarks = models.TextField(verbose_name="备注", null=True, blank=True)
+    checkout_status = models.IntegerField(
+        verbose_name="领出状态",
+        null=True,
+        blank=True,
+        choices=((1, "未领用"), (2, "已领用"), (3, "已归还")),
+    )
 
     def __str__(self):
-        return (
-            f"{self.checkout_date}, {self.checkout_no}, {self.PartNo}, "
-            f"{self.TestItem}, {self.checkout_qty}, {self.SN}, {self.DC}, "
-            f"{self.REV}, {self.Work_Order}, {self.Remarks}, {self.checkout_status}"
-        )
+        return self.checkout_no

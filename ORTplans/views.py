@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from ORTplans.models import TCheckouts
+from ORTplans.models import *
+from ORTplans.ortplanforms import *
 from rich import inspect
 
 
@@ -10,8 +11,11 @@ def index(request):
     return render(request=request, template_name="ortplans/index.html")
 
 
+################# Checkouts #################
+
+
 def checkouts(request):
-    all_checkouts = TCheckouts.objects.all().values()
+    all_checkouts = TCheckouts.objects.all()
     # inspect(all_checkouts)
     context = {
         "all_checkouts": all_checkouts,
@@ -30,96 +34,156 @@ def export_checkouts(request):
     return render(request=request, template_name="ortplans/export_checkouts.html")
 
 
-def edit_checkouts(request):
-    # inspect(request.GET)
+def edit_checkouts(request, checkout_id=0):
     if request.method == "GET":
-        id = request.GET.get("checkout_id")
-        if id == "0":
-            return add_checkouts(request)
-        checkout = TCheckouts.objects.filter(id=id)
-        data = checkout.values()[0]
-        data["checkout_date"] = str(data["checkout_date"])
+        checkout = TCheckouts.objects.filter(id=checkout_id).values()[0]
+        checkout["checkout_date"] = checkout["checkout_date"].strftime("%Y-%m-%d")
+        form = CheckoutForm(checkout)
+        return render(
+            request=request,
+            template_name="ortplans/edit_checkouts.html",
+            context={
+                "form": form,
+            },
+        )
+
+    checkout = TCheckouts.objects.get(id=checkout_id)
+    form = CheckoutForm(data=request.POST, instance=checkout)
+    if form.is_valid():
+        print(form.cleaned_data)
+        form.save()
+    else:
+        print(form.errors)
+        return render(
+            request=request,
+            template_name="ortplans/edit_checkouts.html",
+            context={"form": form, "error": True},
+        )
+    return redirect("/ORTplans/checkouts")
+
+
+def add_checkouts(request):
+    if request.method == "GET":
+        form = CheckoutForm()
         context = {
-            "checkout": data,
+            "checkout": {
+                "id": 0,
+            },
+            "form": form,
         }
         return render(
             request=request,
             template_name="ortplans/edit_checkouts.html",
             context=context,
         )
+
+    form = CheckoutForm(data=request.POST)
+    if form.is_valid():
+        print(form.cleaned_data)
+        form.save()
     else:
-        return render(request=request, template_name="ortplans/checkouts.html")
+        print(form.errors)
+        return render(
+            request=request,
+            template_name="ortplans/edit_checkouts.html",
+            context={"form": form, "error": True},
+        )
+    return redirect("/ORTplans/checkouts")
 
 
-def add_checkouts(request):
+def delete_checkouts(request, checkout_id):
+    TCheckouts.objects.filter(id=checkout_id).delete()
+    return redirect("/ORTplans/checkouts")
+
+
+################# Schedules #################
+
+
+def schedules(request):
+    all_schedules = TSchedule.objects.all()
+    # inspect(all_schedules)
     context = {
-        "checkout": {
-            "id": 0,
-        }
+        "all_schedules": all_schedules,
     }
     return render(
-        request=request,
-        template_name="ortplans/edit_checkouts.html",
-        context=context,
+        request=request, template_name="ortplans/schedules.html", context=context
     )
 
 
-def save_edit_checkouts(request):
-    if request.method == "POST":
-        # 获取表单数据
-        checkout_id = request.POST.get("checkout_id")
-        checkout_date = request.POST.get("checkout_date")
-        checkout_no = request.POST.get("checkout_no")
-        PartNo = request.POST.get("PartNo")
-        checkout_qty = request.POST.get("checkout_qty")
-        TestItem = request.POST.get("TestItem")
-        sn = request.POST.get("SN")
-        dc = request.POST.get("DC")
-        rev = request.POST.get("REV")
-        Work_Order = request.POST.get("Work_Order")
-        Remarks = request.POST.get("Remarks")
+def import_schedules(request):
 
-        try:
-            cur = TCheckouts.objects.filter(id=checkout_id)
-            if cur.exists():
-                # 更新现有记录
-                checkout, created = TCheckouts.objects.update_or_create(
-                    id=checkout_id,
-                    defaults={
-                        "checkout_date": checkout_date,
-                        "checkout_no": checkout_no,
-                        "PartNo": PartNo,
-                        "checkout_qty": checkout_qty,
-                        "TestItem": TestItem,
-                        "SN": sn,
-                        "DC": dc,
-                        "REV": rev,
-                        "Work_Order": Work_Order,
-                        "Remarks": Remarks,
-                    },
-                )
-            else:
-                # 插入新记录
-                checkout = TCheckouts(
-                    checkout_date=checkout_date,
-                    checkout_no=checkout_no,
-                    PartNo=PartNo,
-                    checkout_qty=checkout_qty,
-                    TestItem=TestItem,
-                    SN=sn,
-                    DC=dc,
-                    REV=rev,
-                    Work_Order=Work_Order,
-                    Remarks=Remarks,
-                )
-                checkout.save()
-        except Exception as e:
-            return redirect("/ortplans/edit_checkouts?checkout_id=" + checkout_id)
-    return checkouts(request)
+    return render(request=request, template_name="ortplans/import_schedules.html")
 
 
-def delete_checkouts(request):
+def export_schedules(request):
+    return render(request=request, template_name="ortplans/export_schedules.html")
+
+
+def edit_schedules(request, schedule_id=0):
     if request.method == "GET":
-        checkout_id = request.GET.get("checkout_id")
-        TCheckouts.objects.filter(id=checkout_id).delete()
-    return checkouts(request)
+        schedule = TSchedule.objects.filter(id=schedule_id).values()[0]
+        schedule["StartDate"] = schedule["StartDate"].strftime("%Y-%m-%d")
+        schedule["EndDate"] = schedule["EndDate"].strftime("%Y-%m-%d")
+        form = ScheduleForm(schedule)
+        return render(
+            request=request,
+            template_name="ortplans/edit_schedules.html",
+            context={
+                "form": form,
+            },
+        )
+
+    schedule = TSchedule.objects.get(id=schedule_id)
+    form = ScheduleForm(data=request.POST, instance=schedule)
+    if form.is_valid():
+        print(form.cleaned_data)
+        form.save()
+    else:
+        print(form.errors)
+        return render(
+            request=request,
+            template_name="ortplans/edit_schedules.html",
+            context={"form": form, "error": True},
+        )
+    return redirect("/ORTplans/schedules")
+
+
+def add_schedules(request):
+    if request.method == "GET":
+        form = ScheduleForm()
+        context = {
+            "schedule": {
+                "id": 0,
+            },
+            "form": form,
+        }
+        return render(
+            request=request,
+            template_name="ortplans/edit_schedules.html",
+            context=context,
+        )
+
+    form = ScheduleForm(data=request.POST)
+    if form.is_valid():
+        print(form.cleaned_data)
+        form.save()
+    else:
+        print(form.errors)
+        return render(
+            request=request,
+            template_name="ortplans/edit_schedules.html",
+            context={"form": form, "error": True},
+        )
+    return redirect("/ORTplans/schedules")
+
+
+def delete_schedules(request, schedule_id):
+    TSchedule.objects.filter(id=schedule_id).delete()
+    return redirect("/ORTplans/schedules")
+
+
+################# Technicians #################
+
+
+def technicians(request):
+    return render(request=request, template_name="ortplans/technicians.html")

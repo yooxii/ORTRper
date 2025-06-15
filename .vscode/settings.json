@@ -10,5 +10,6 @@
     "emmet.includeLanguages": {
         "django-html": "html"
     },
-    "html.format.templating": true
+    "html.format.templating": true,
+    "svg.preview.background": "editor"
 }

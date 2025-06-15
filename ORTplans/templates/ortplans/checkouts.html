@@ -4,7 +4,8 @@
 
 {% block content %}
 <style>
-    #checkouts-menu {
+    #rclick-menu,
+    #rclick-th-menu {
         display: none;
         position: absolute;
         background-color: #fff;
@@ -29,58 +30,76 @@
             </div>
         </div>
     </form>
-    <!-- <a href="{% url 'edit_checkouts' %}" class="btn btn-outline-secondary" title="编辑">编辑</a> -->
     {% endif %}
-    <form method="post" action="{% url 'edit_checkouts' %}">
-        {% block checkouts_edit_btns %} {% endblock checkouts_edit_btns %}
-        <div class="table-responsive">
-            <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek">
-                <thead class="thead-dark">
-                    <tr>
-                        <!-- <th> <span>NO.</span> </th> -->
-                        <th> <span>领用单号</span> </th>
-                        <th> <span>领用日期</span> </th>
-                        <th> <span>机种名称</span> </th>
-                        <th> <span>数量</span> </th>
-                        <th> <span>测试项目</span> </th>
-                        <th> <span>序列号</span> </th>
-                        <th> <span>周期</span> </th>
-                        <th> <span>版本</span> </th>
-                        <th> <span>工令</span> </th>
-                        <th> <span>备注</span> </th>
-                    </tr>
-                </thead>
+    {% block checkouts_edit_btns %} {% endblock checkouts_edit_btns %}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek">
+            <thead class="thead-dark">
+                <tr>
+                    <!-- <th> <span>NO.</span> </th> -->
+                    <th> <span class="text-nowrap">领用单号</span> </th>
+                    <th> <span class="text-nowrap">领用日期</span> </th>
+                    <th> <span class="text-nowrap">机种名称</span> </th>
+                    <th> <span class="text-nowrap">数量</span> </th>
+                    <th> <span class="text-nowrap">测试项目</span> </th>
+                    <th> <span class="text-nowrap">序列号</span> </th>
+                    <th> <span class="text-nowrap">周期</span> </th>
+                    <th> <span class="text-nowrap">版本</span> </th>
+                    <th> <span class="text-nowrap">工令</span> </th>
+                    <th> <span class="text-nowrap">领出状态</span> </th>
+                    <th> <span class="text-nowrap">备注</span> </th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    {% for checkout in all_checkouts %}
-                    <tr data-checkout-id="{{ checkout.id }}">
-                        {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
-                        <!-- <td> {{ checkout.id }} </td> -->
-                        <td> {{ checkout.checkout_no }} </td>
-                        <td> {{ checkout.checkout_date }} </td>
-                        <td> {{ checkout.PartNo }} </td>
-                        <td> {{ checkout.checkout_qty }} </td>
-                        <td> {{ checkout.TestItem }} </td>
-                        <td> {{ checkout.SN }} </td>
-                        <td> {{ checkout.DC }} </td>
-                        <td> {{ checkout.REV }} </td>
-                        <td> {{ checkout.Work_Order }} </td>
-                        <td> {{ checkout.Remarks }} </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </form>
+            <tbody>
+                {% for checkout in all_checkouts %}
+                <tr data-checkout-id="{{ checkout.id }}">
+                    {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
+                    <!-- <td class="text-center align-middle"> {{ checkout.id }} </td> -->
+                    <td class="align-middle"> {{ checkout.checkout_no }} </td>
+                    <td class="align-middle text-nowrap"> {{ checkout.checkout_date|date:"Y/m/d" }} </td>
+                    <td class="align-middle text-nowrap"> {{ checkout.PartNo }} </td>
+                    <td class="align-middle"> {{ checkout.checkout_qty }} </td>
+                    <td class="align-middle"> {{ checkout.TestItem }} </td>
+                    <td class="align-middle" style="font-size: small;"> {{ checkout.SN|escape|linebreaksbr }} </td>
+                    <td class="align-middle"> {{ checkout.DC }} </td>
+                    <td class="align-middle"> {{ checkout.REV }} </td>
+                    <td class="align-middle text-nowrap"> {{ checkout.Work_Order }} </td>
+                    <td class="align-middle"> {{ checkout.get_checkout_status_display }} </td>
+                    <td class="align-middle" style="font-size: small;"> {{ checkout.Remarks }} </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center">暂无数据，请先添加</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 {% block checkouts_edit_script %} {% endblock checkouts_edit_script %}
-<div class="list-group" id="checkouts-menu">
+
+<div class="list-group" id="rclick-menu">
     <a class="list-group-item list-group-item-action" href="{% url 'add_checkouts' %}">添加</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'edit_checkouts' %}">编辑</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'delete_checkouts' %}">删除</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'edit_checkouts' checkout_id=1 %}" id="editCheckout">编辑</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'delete_checkouts' checkout_id=1 %}" id="delCheckout">删除</a>
+</div>
+
+<div class="list-group" id="rclick-th-menu">
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="list-group-item list-group-item-action" formaction="{% url 'add_checkouts' %}">添加</button>
+    </form>
 </div>
 
 <script>
+    function hideMenu() {
+        // 隐藏自定义右键菜单
+        $("#rclick-menu").hide();
+        $("#rclick-th-menu").hide();
+    }
+
     $(document).on("contextmenu", "#checkouts_table tbody tr", function (event) {
         event.preventDefault();
 
@@ -88,25 +107,32 @@
         var checkoutId = $(this).data('checkout-id');
         console.log(checkoutId);
 
-        // 设置右键菜单项的链接
-        $("#checkouts-menu a").each(function () {
-            var href = $(this).attr("href");
-            if (!href) return;
-            href = href.split("?")[0]
-            var updatedHref = href.includes("?") ? href : href + "?checkout_id=" + checkoutId;
-            $(this).attr("href", updatedHref);
-        });
+        hideMenu();
+
+        $("#editCheckout").attr("href", "{% url 'edit_checkouts' checkout_id=1 %}".replace('1', checkoutId));
+        $("#delCheckout").attr("href", "{% url 'delete_checkouts' checkout_id=1 %}".replace('1', checkoutId));
 
         // 在鼠标点击的位置显示自定义右键菜单
-        $("#checkouts-menu").css({
+        $("#rclick-menu").css({
             top: event.clientY,
             left: event.clientX
         }).show();
     });
 
+    $(document).on("contextmenu", "#checkouts_table thead th", function (event) {
+        event.preventDefault();
+
+        hideMenu();
+
+        $("#rclick-th-menu").css({
+            top: event.clientY,
+            left: event.clientX
+        }).show();
+
+    });
+
     $(document).on("click", function () {
-        // 隐藏自定义右键菜单
-        $("#checkouts-menu").hide();
+        hideMenu();
     });
 
 </script>

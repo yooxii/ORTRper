@@ -3,19 +3,19 @@
 {% block header %}{% load static %}<h1>{% block title %}领用编辑{% endblock title %}</h1>{% endblock header %}
 
 {% block content %}
-{% if error %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert" id="flashes">
-    {% for message in error %} {{ message }}<br />
-    {% endfor %}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-{% endif %}
-<form method="post" action="{% url 'save_edit_checkouts'%}" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-row">
-        <div class="form-group col-md-3" hidden>
+        {% for field in form %}
+        <div class="form-group col-md-4">
+            {{ field.label }}{{ field }}
+            {% if error %}
+            <span class="text-danger">{{ field.errors.0 }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <!-- <div class="form-group col-md-3" hidden>
             <label for="checkout_id">NO.</label>
             <input type="text" class="form-control" name="checkout_id" value="{{ checkout.id }}">
         </div>
@@ -59,7 +59,8 @@
     <div class="form-group">
         <label for="Remarks">备注</label>
         <textarea class="form-control" name="Remarks" placeholder="备注">{{ checkout.Remarks }}</textarea>
-    </div>
+    </div> -->
+    <a href="{% url 'checkouts' %}" class="btn btn-primary">取消</a>
     <button type="submit" class="btn btn-primary">保存</button>
 </form>
 {% endblock content %}
