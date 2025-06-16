@@ -59,16 +59,16 @@
                 <tr data-schedule-id="{{ schedule.id }}">
                     <td> {{ schedule.JobNo }} </td>
                     <td> {{ schedule.get_QRT_display }} </td>
-                    <td> {{ schedule.Product }} </td>
-                    <td> {{ schedule.Customer }} </td>
+                    <td> {{ schedule.get_Product_display }} </td>
+                    <td> {{ schedule.get_Customer_display }} </td>
                     <td> {{ schedule.PartNo }} </td>
                     <td> {{ schedule.get_Stage_display }} </td>
                     <td> {{ schedule.TestItem }} </td>
                     <td> {{ schedule.SampleSize }} </td>
                     <td> {{ schedule.TestPeriod }} </td>
                     <td> {{ schedule.Owner }} </td>
-                    <td> {{ schedule.StartDate }} </td>
-                    <td> {{ schedule.EndDate }} </td>
+                    <td> {{ schedule.StartDate|date:"Y/m/d" }} </td>
+                    <td> {{ schedule.EndDate|date:"Y/m/d" }} </td>
                     <td> {{ schedule.get_Status_display }} </td>
                     <td> {{ schedule.get_Upload_Elab_display }} </td>
                     <td> {{ schedule.Remark }} </td>

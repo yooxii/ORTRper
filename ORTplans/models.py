@@ -1,4 +1,5 @@
 from django.db import models
+from .schedule import customer, producttype
 
 
 class TSchedule(models.Model):
@@ -7,9 +8,20 @@ class TSchedule(models.Model):
     QRT = models.BooleanField(
         verbose_name="送测", default=False, choices=((False, "领用"), (True, "送测"))
     )
-    Product = models.CharField(verbose_name="产品别", max_length=25)
-    Customer = models.CharField(verbose_name="客户别", max_length=15)
-    PartNo = models.CharField(verbose_name="机种名", max_length=25)
+    Product = models.IntegerField(
+        verbose_name="产品别",
+        default=0,
+        choices=producttype,
+    )
+    Customer = models.IntegerField(
+        verbose_name="客户别",
+        default=0,
+        choices=customer,
+    )
+    PartNo = models.CharField(
+        verbose_name="机种名",
+        max_length=15,
+    )
     Stage = models.IntegerField(
         verbose_name="阶段",
         default=1,
@@ -43,6 +55,9 @@ class TSchedule(models.Model):
 
     def __str__(self):
         return self.JobNo
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class TCheckouts(models.Model):

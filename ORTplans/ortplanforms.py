@@ -45,6 +45,9 @@ class ScheduleForm(forms.ModelForm):
     StartDate = forms.DateField(
         widget=forms.DateInput(attrs={"type": "date"}), label="开始日期"
     )
+    EndDate = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"}), label="结束日期"
+    )
     SampleSize = forms.IntegerField(
         widget=forms.NumberInput(attrs={"min": 0}), label="样品数"
     )
@@ -105,7 +108,7 @@ class ScheduleForm(forms.ModelForm):
                 Submit(
                     "返回", "返回", css_class="button white", onclick="history.back(-1)"
                 ),
-                Submit("提交", "提交", css_class="button white"),
+                Submit("保存", "保存", css_class="button white"),
             ),
         )
 
