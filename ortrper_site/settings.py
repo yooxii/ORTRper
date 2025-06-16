@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,11 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    "ORTplans.apps.OrtplansConfig",
+    "ORTplans",
+    # "ORTplans.apps.OrtplansConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -79,6 +80,11 @@ WSGI_APPLICATION = "ortrper_site.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+FIXTURE_DIRS = [
+    os.path.join(BASE_DIR, "ORTPlans/fixtures"),  # 指定 fixtures 文件夹的路径
+    # 可以添加更多路径
+]
 
 DATABASES = {
     "default": {

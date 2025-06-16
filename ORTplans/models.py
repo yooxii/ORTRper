@@ -1,5 +1,22 @@
 from django.db import models
-from .schedule import customer, producttype
+
+
+class TProductType(models.Model):
+    id = models.AutoField(primary_key=True)
+    product_code = models.CharField(verbose_name="产品代码", max_length=10, unique=True)
+    product_type = models.CharField(verbose_name="产品类型", max_length=20)
+
+    def __str__(self):
+        return self.product_type
+
+
+class TCustCode(models.Model):
+    id = models.AutoField(primary_key=True)
+    cust_code = models.CharField(verbose_name="客户代码", max_length=10, unique=True)
+    cust_name = models.CharField(verbose_name="客户名称", max_length=50)
+
+    def __str__(self):
+        return self.cust_name
 
 
 class TSchedule(models.Model):
@@ -8,15 +25,21 @@ class TSchedule(models.Model):
     QRT = models.BooleanField(
         verbose_name="送测", default=False, choices=((False, "领用"), (True, "送测"))
     )
-    Product = models.IntegerField(
-        verbose_name="产品别",
-        default=0,
-        choices=producttype,
+    Product = models.ForeignKey(
+        verbose_name="产品类型",
+        to="TProductType",
+        to_field="id",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
-    Customer = models.IntegerField(
-        verbose_name="客户别",
-        default=0,
-        choices=customer,
+    Customer = models.ForeignKey(
+        verbose_name="客户名称",
+        to="TCustCode",
+        to_field="id",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     PartNo = models.CharField(
         verbose_name="机种名",

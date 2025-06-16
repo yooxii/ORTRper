@@ -121,10 +121,8 @@ def export_schedules(request):
 
 def edit_schedules(request, schedule_id=0):
     if request.method == "GET":
-        schedule = TSchedule.objects.filter(id=schedule_id).values()[0]
-        schedule["StartDate"] = schedule["StartDate"].strftime("%Y-%m-%d")
-        schedule["EndDate"] = schedule["EndDate"].strftime("%Y-%m-%d")
-        form = ScheduleForm(schedule)
+        schedule = TSchedule.objects.filter(id=schedule_id).first()
+        form = ScheduleForm(instance=schedule)
         return render(
             request=request,
             template_name="ortplans/edit_schedules.html",

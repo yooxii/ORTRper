@@ -59,8 +59,8 @@
                 <tr data-schedule-id="{{ schedule.id }}">
                     <td> {{ schedule.JobNo }} </td>
                     <td> {{ schedule.get_QRT_display }} </td>
-                    <td> {{ schedule.get_Product_display }} </td>
-                    <td> {{ schedule.get_Customer_display }} </td>
+                    <td> {{ schedule.Product.product_type }} </td>
+                    <td> {{ schedule.Customer.cust_name }} </td>
                     <td> {{ schedule.PartNo }} </td>
                     <td> {{ schedule.get_Stage_display }} </td>
                     <td> {{ schedule.TestItem }} </td>

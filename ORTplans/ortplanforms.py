@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, Div
+from crispy_forms.layout import Layout, Submit, Row, Column, Div, Field
 
 
 class CheckoutForm(forms.ModelForm):
@@ -42,15 +42,15 @@ class CheckoutForm(forms.ModelForm):
 
 
 class ScheduleForm(forms.ModelForm):
-    StartDate = forms.DateField(
-        widget=forms.DateInput(attrs={"type": "date"}), label="开始日期"
-    )
-    EndDate = forms.DateField(
-        widget=forms.DateInput(attrs={"type": "date"}), label="结束日期"
-    )
-    SampleSize = forms.IntegerField(
-        widget=forms.NumberInput(attrs={"min": 0}), label="样品数"
-    )
+    # StartDate = forms.DateField(
+    #     widget=forms.DateInput(attrs={"type": "date"}), label="开始日期"
+    # )
+    # EndDate = forms.DateField(
+    #     widget=forms.DateInput(attrs={"type": "date"}), label="结束日期"
+    # )
+    # SampleSize = forms.IntegerField(
+    #     widget=forms.NumberInput(attrs={"min": 0}), label="样品数"
+    # )
 
     class Meta:
         model = TSchedule
@@ -93,8 +93,14 @@ class ScheduleForm(forms.ModelForm):
                 css_class="form-row",
             ),
             Row(
-                Column("StartDate", css_class="form-group col-md-3 mb-0"),
-                Column("EndDate", css_class="form-group col-md-3 mb-0"),
+                Column(
+                    Field(
+                        "StartDate", css_class="form-group col-md-3 mb-0", type="date"
+                    ),
+                ),
+                Column(
+                    Field("EndDate", css_class="form-group col-md-3 mb-0", type="date"),
+                ),
                 Column("Status", css_class="form-group col-md-3 mb-0"),
                 Column("Upload_Elab", css_class="form-group col-md-3 mb-0"),
                 css_class="form-row",
