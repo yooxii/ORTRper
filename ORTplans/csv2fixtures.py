@@ -2,7 +2,7 @@ import csv
 import json
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).resolve().parent
+FILE_DIR_ = Path(__file__).resolve().parent
 
 
 def read_csv_to_fixtures(file_path, model):
@@ -31,18 +31,17 @@ def read_csv_to_fixtures(file_path, model):
         return []
 
 
-custcode_file = ROOT_DIR.joinpath("static/data/custcode.csv")
-producttype_file = ROOT_DIR.joinpath("static/data/producttype.csv")
-
-customer = read_csv_to_fixtures(custcode_file, "ORTplans.tcustcode")
-producttype = read_csv_to_fixtures(producttype_file, "ORTplans.tproducttype")
+customer = read_csv_to_fixtures(
+    FILE_DIR_.joinpath("static/data/custcode.csv"), "ORTplans.tcustcode"
+)
+producttype = read_csv_to_fixtures(
+    FILE_DIR_.joinpath("static/data/producttype.csv"), "ORTplans.tproducttype"
+)
 
 if __name__ == "__main__":
-    # print(customer)
-    # print(producttype)
-    with open(ROOT_DIR.joinpath("fixtures/customer.json"), "w", encoding="utf-8") as f:
+    with open(FILE_DIR_.joinpath("fixtures/customer.json"), "w", encoding="utf-8") as f:
         json.dump(customer, f, ensure_ascii=False, indent=4)
     with open(
-        ROOT_DIR.joinpath("fixtures/producttype.json"), "w", encoding="utf-8"
+        FILE_DIR_.joinpath("fixtures/producttype.json"), "w", encoding="utf-8"
     ) as f:
         json.dump(producttype, f, ensure_ascii=False, indent=4)

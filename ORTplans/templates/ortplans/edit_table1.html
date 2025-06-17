@@ -1,7 +1,7 @@
 {% extends "ortplans/ort_base.html" %}
 {% load crispy_forms_tags %}
 
-{% block header %}{% load static %}<h1>{% block title %}领用编辑{% endblock title %}</h1>{% endblock header %}
+{% block header %}{% load static %}<h1>{{ title }}</h1>{% endblock header %}
 
 {% block content %}
 {% crispy form %}

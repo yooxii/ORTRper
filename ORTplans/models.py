@@ -19,6 +19,35 @@ class TCustCode(models.Model):
         return self.cust_name
 
 
+class TTechnician(models.Model):
+    id = models.AutoField(primary_key=True)
+    tech_code = models.CharField(verbose_name="工号", max_length=10, unique=True)
+    tech_name = models.CharField(verbose_name="姓名", max_length=50)
+    tech_email = models.EmailField(verbose_name="邮箱", null=True, blank=True)
+    tech_phone = models.CharField(
+        verbose_name="电话", max_length=20, null=True, blank=True
+    )
+
+    def __str__(self):
+        return self.tech_name
+
+
+class TTestItem(models.Model):
+    id = models.AutoField(primary_key=True)
+    test_item = models.CharField(verbose_name="测试项目", max_length=50, unique=True)
+    test_time = models.IntegerField(verbose_name="测试时间(h)")
+    test_owner = models.ManyToManyField(
+        verbose_name="测试负责人",
+        related_name="test_owner",
+        to="TTechnician",
+        blank=True,
+    )
+    Remark = models.TextField(verbose_name="备注", null=True, blank=True)
+
+    def __str__(self):
+        return self.test_item
+
+
 class TSchedule(models.Model):
     id = models.AutoField(primary_key=True)
     JobNo = models.CharField(verbose_name="工作编号", max_length=20, unique=True)
@@ -50,14 +79,19 @@ class TSchedule(models.Model):
         default=1,
         choices=((1, "MP"), (2, "MVT"), (3, "DVT"), (4, "EVT")),
     )
-    TestItem = models.CharField(verbose_name="测试项目", max_length=50)
-    SampleSize = models.IntegerField(
-        verbose_name="样品数",
+    TestItem = models.ForeignKey(
+        verbose_name="测试项目",
+        to="TTestItem",
+        to_field="id",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
-    TestPeriod = models.IntegerField(
-        verbose_name="试验时间",
+    SampleSize = models.IntegerField(verbose_name="样品数", default=1)
+    TestPeriod = models.IntegerField(verbose_name="试验时间")
+    Owner = models.CharField(
+        verbose_name="负责人", null=True, blank=True, max_length=50
     )
-    Owner = models.CharField(verbose_name="负责人", max_length=50)
     StartDate = models.DateField(
         verbose_name="开始日期",
     )
@@ -78,9 +112,6 @@ class TSchedule(models.Model):
 
     def __str__(self):
         return self.JobNo
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class TCheckouts(models.Model):

@@ -20,7 +20,7 @@
 </head>
 
 <body class="container-fluid">
-    <main>
+    <main class="mb-5">
         <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -30,18 +30,18 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false"><span>计划</span>
+                          aria-expanded="false"><span>计划</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{% url 'checkouts' %}"><img src="{% static 'img/icon/icn_wuzilingtuiliaochaxun.svg' %}"
-                                     alt="领用" /><span>领用</span></a>
+                                  alt="领用" /><span>领用</span></a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'schedules' %}"><img src="{% static 'img/icon/paicheng.svg' %}" alt="排程" /><span>排程</span></a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false"><span>报告</span>
+                          aria-expanded="false"><span>报告</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/"><img src="{% static 'img/icon/amz.svg' %}" alt="AMZ" /><span>AMZ</span></a>
@@ -51,12 +51,12 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false"><span>管理</span>
+                          aria-expanded="false"><span>管理</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/"><span>客户列表</span></a>
+                            <a class="dropdown-item" href="{% url 'custproducts' %}"><span>客户&amp;产品</span></a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/"><span>测试项目</span></a>
+                            <a class="dropdown-item" href="{% url 'testitems' %}"><span>测试项目</span></a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{%url 'technicians' %}"><span>测试人员</span></a>
                         </div>
@@ -90,7 +90,7 @@
             {% block right_peek %} {% endblock right_peek %}
         </div>
     </main>
-    <footer class="d-flex justify-content-center fixed-bottom">
+    <footer class="d-block justify-content-center fixed-bottom bg-light text-center">
         <p>版权所有 © 2025 ORT报告工作站</p>
     </footer>
     <script src="{% static 'js/index.js' %}"></script>
