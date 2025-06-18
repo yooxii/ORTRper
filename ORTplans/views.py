@@ -143,21 +143,40 @@ def export_schedules(request):
 
 
 def edit_schedules(request, schedule_id=0):
-    return render_edit_form(
-        request,
-        TSchedule,
-        ScheduleForm,
-        schedule_id,
-        "ortplans/edit_table1.html",
-        "schedules",
-        "排程编辑",
-    )
+    template_name = "ortplans/edit_table1.html"
+    redirect_view_name = "schedules"
+    title_text = "排程编辑"
+
+    if request.method == "GET":
+        obj = get_object_or_404(TSchedule, id=schedule_id)
+        form = ScheduleForm(instance=obj)
+        return render(request, template_name, {"title": title_text, "form": form})
+
+    obj = get_object_or_404(TSchedule, id=schedule_id)
+    form = ScheduleForm(request.POST, instance=obj)
+    if form.is_valid():
+        form.data.update({"id": schedule_id})
+        form.save()
+        return redirect(redirect_view_name)
+    else:
+        return render(request, template_name, {"title": title_text, "form": form})
 
 
 def add_schedules(request):
-    return render_add_form(
-        request, ScheduleForm, "ortplans/edit_table1.html", "schedules", "排程添加"
-    )
+    template_name = "ortplans/edit_table1.html"
+    redirect_view_name = "schedules"
+    title_text = "排程编辑"
+
+    if request.method == "GET":
+        form = ScheduleForm()
+        return render(request, template_name, {"title": title_text, "form": form})
+
+    form = ScheduleForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect(redirect_view_name)
+    else:
+        return render(request, template_name, {"title": title_text, "form": form})
 
 
 def delete_schedules(request, schedule_id):
