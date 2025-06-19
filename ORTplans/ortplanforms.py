@@ -72,6 +72,7 @@ class TestItemForm(forms.ModelForm):
             "test_item",
             "test_time",
             "test_owner",
+            "dispose",
             "Remark",
         ]
 
@@ -81,9 +82,10 @@ class TestItemForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Row(
-                Column("test_item", css_class="form-group col-md-4 mb-0"),
-                Column("test_time", css_class="form-group col-md-4 mb-0"),
-                Column("test_owner", css_class="form-group col-md-4 mb-0"),
+                Column("test_item", css_class="form-group col-md-3 mb-0"),
+                Column("test_time", css_class="form-group col-md-3 mb-0"),
+                Column("dispose", css_class="form-group col-md-3 mb-0"),
+                Column("test_owner", css_class="form-group col-md-3 mb-0"),
                 css_class="form-row",
             ),
             Row(
@@ -137,7 +139,6 @@ class CheckoutForm(forms.ModelForm):
             "checkout_qty",
             "REV",
             "Work_Order",
-            "TestItem",
             "checkout_status",
             "SN",
             "Remarks",
@@ -154,21 +155,17 @@ class CheckoutForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Row(
-                Column("checkout_no", css_class="form-group col-md-4 mb-0"),
-                Column("PartNo", css_class="form-group col-md-4 mb-0"),
-                Column("checkout_date", css_class="form-group col-md-4 mb-0"),
+                Column("checkout_no", css_class="form-group col-md-3 mb-0"),
+                Column("PartNo", css_class="form-group col-md-3 mb-0"),
+                Column("checkout_date", css_class="form-group col-md-3 mb-0"),
+                Column("DC", css_class="form-group col-md-3 mb-0"),
                 css_class="form-row",
             ),
             Row(
-                Column("DC", css_class="form-group col-md-4 mb-0"),
-                Column("checkout_qty", css_class="form-group col-md-4 mb-0"),
-                Column("REV", css_class="form-group col-md-4 mb-0"),
-                css_class="form-row",
-            ),
-            Row(
-                Column("Work_Order", css_class="form-group col-md-4 mb-0"),
-                Column("TestItem", css_class="form-group col-md-4 mb-0"),
-                Column("checkout_status", css_class="form-group col-md-4 mb-0"),
+                Column("checkout_qty", css_class="form-group col-md-3 mb-0"),
+                Column("REV", css_class="form-group col-md-3 mb-0"),
+                Column("Work_Order", css_class="form-group col-md-3 mb-0"),
+                Column("checkout_status", css_class="form-group col-md-3 mb-0"),
                 css_class="form-row",
             ),
             Row(
@@ -178,9 +175,16 @@ class CheckoutForm(forms.ModelForm):
             ),
             Div(
                 Submit(
-                    "返回", "返回", css_class="button white", onclick="history.back(-1)"
+                    "back",
+                    "返回",
+                    css_class="button white",
                 ),
-                Submit("保存", "保存", css_class="button white"),
+                Submit("save", "保存", css_class="button white"),
+                Submit(
+                    "save_and_schedule",
+                    "保存并转到排程编辑",
+                    css_class="button white",
+                ),
             ),
         )
 
@@ -191,8 +195,8 @@ class ScheduleForm(forms.ModelForm):
         fields = [
             "JobNo",
             "QRT",
-            # "Product",
-            # "Customer",
+            "Product",
+            "Customer",
             "PartNo",
             "Stage",
             "TestItem",
@@ -203,6 +207,7 @@ class ScheduleForm(forms.ModelForm):
             "EndDate",
             "Status",
             "Upload_Elab",
+            "Work_Order",
             "Remark",
         ]
         widgets = {
@@ -217,18 +222,19 @@ class ScheduleForm(forms.ModelForm):
         self.helper.form_method = "post"
         self.helper.layout = Layout(
             Row(
-                Column("JobNo", css_class="form-group col-md-2 mb-0"),
+                Column("JobNo", css_class="form-group col-md-1 mb-0"),
                 Column("QRT", css_class="form-group col-md-1 mb-0"),
-                # Column("Product", css_class="form-group col-md-3 mb-0"),
-                # Column("Customer", css_class="form-group col-md-3 mb-0"),
                 Column("PartNo", css_class="form-group col-md-2 mb-0"),
                 Column("Stage", css_class="form-group col-md-1 mb-0"),
+                Column("SampleSize", css_class="form-group col-md-1 mb-0"),
                 Column("TestItem", css_class="form-group col-md-3 mb-0"),
-                Column("SampleSize", css_class="form-group col-md-2 mb-0"),
-                Column("TestPeriod", css_class="form-group col-md-1 mb-0"),
+                Column("Work_Order", css_class="form-group col-md-3 mb-0"),
+                # Column("TestPeriod", css_class="form-group col-md-1 mb-0"),
                 css_class="form-row",
             ),
             Row(
+                # Column("Customer", css_class="form-group col-md-3 mb-0"),
+                # Column("Product", css_class="form-group col-md-3 mb-0"),
                 css_class="form-row",
             ),
             Row(
@@ -239,14 +245,17 @@ class ScheduleForm(forms.ModelForm):
                 css_class="form-row",
             ),
             Row(
-                Column("Owner", css_class="form-group col-md-6 mb-0"),
+                # Column("Owner", css_class="form-group col-md-6 mb-0"),
                 Column("Remark", css_class="form-group col-md-6 mb-0"),
                 css_class="form-row",
             ),
             Div(
                 Submit(
-                    "返回", "返回", css_class="button white", onclick="history.back(-1)"
+                    "back",
+                    "返回",
+                    css_class="button white",
+                    onclick="location.href='/schedule/",
                 ),
-                Submit("保存", "保存", css_class="button white"),
+                Submit("save", "保存", css_class="button white"),
             ),
         )

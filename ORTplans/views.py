@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseBadRequest
+from django.core.exceptions import ValidationError
+from datetime import datetime, timedelta
 
 # Create your views here.
 from ORTplans.models import *
@@ -102,21 +104,57 @@ def export_checkouts(request):
 
 
 def edit_checkouts(request, checkout_id=0):
-    return render_edit_form(
-        request,
-        TCheckouts,
-        CheckoutForm,
-        checkout_id,
-        "ortplans/edit_table1.html",
-        "checkouts",
-        "领用编辑",
-    )
+    model_class = TCheckouts
+    form_class = CheckoutForm
+    object_id = checkout_id
+    template_name = "ortplans/edit_table1.html"
+    redirect_view_name = "checkouts"
+    title_text = "领用编辑"
+
+    if request.method == "GET":
+        obj = get_object_or_404(model_class, id=object_id)
+        form = form_class(instance=obj)
+        return render(request, template_name, {"title": title_text, "form": form})
+
+    if "back" in request.POST:
+        return redirect(redirect_view_name)
+    obj = get_object_or_404(model_class, id=object_id)
+    form = form_class(request.POST, instance=obj)
+    if form.is_valid():
+        form.save()
+        if "save_and_schedule" in request.POST:
+            sch = TSchedule.objects.filter(Work_Order=obj.Work_Order).first()
+            if sch:
+                return redirect("edit_schedules", sch.id)
+            return redirect("add_schedules", checkout_id=obj.id)
+        else:
+            return redirect(redirect_view_name)
+    else:
+        return render(request, template_name, {"title": title_text, "form": form})
 
 
 def add_checkouts(request):
-    return render_add_form(
-        request, CheckoutForm, "ortplans/edit_table1.html", "checkouts", "领用添加"
-    )
+    template_name = "ortplans/edit_table1.html"
+    form_class = CheckoutForm
+    redirect_view_name = "checkouts"
+    title_text = "领用添加"
+
+    if request.method == "GET":
+        form = form_class()
+        return render(request, template_name, {"title": title_text, "form": form})
+
+    if "back" in request.POST:
+        return redirect(redirect_view_name)
+    form = form_class(request.POST)
+    if form.is_valid():
+        obj = form.save()
+        if "save_and_schedule" in request.POST:
+            return redirect("add_schedules", checkout_id=obj.id)
+        else:
+            return redirect(redirect_view_name)
+        return redirect(redirect_view_name)
+    else:
+        return render(request, template_name, {"title": title_text, "form": form})
 
 
 def delete_checkouts(request, checkout_id):
@@ -152,26 +190,89 @@ def edit_schedules(request, schedule_id=0):
         form = ScheduleForm(instance=obj)
         return render(request, template_name, {"title": title_text, "form": form})
 
+    if "back" in request.POST:
+        return redirect(redirect_view_name)
     obj = get_object_or_404(TSchedule, id=schedule_id)
-    form = ScheduleForm(request.POST, instance=obj)
+    data = request.POST.copy()
+    form = ScheduleForm(data, instance=obj)
+
+    form = deal_schedule_datas(form)
     if form.is_valid():
-        form.data.update({"id": schedule_id})
         form.save()
         return redirect(redirect_view_name)
     else:
         return render(request, template_name, {"title": title_text, "form": form})
 
 
-def add_schedules(request):
+def deal_schedule_datas(form: ScheduleForm):
+    try:
+        model = form.data.get("PartNo")
+        testitem_id = form.data.get("TestItem")
+
+        if not model or not testitem_id:
+            raise ValidationError("PartNo或TestItem未提供")
+
+        obj_product = TProductType.objects.filter(product_code=model[:2]).first()
+        obj_customer = TCustCode.objects.filter(cust_code=model[7:9]).first()
+        obj_testitem = TTestItem.objects.filter(id=testitem_id).first()
+
+        if not obj_product:
+            raise ValidationError("根据PartNo未找到对应的产品类型")
+
+        if not obj_customer:
+            raise ValidationError("根据PartNo未找到对应的客户代码")
+
+        if not obj_testitem:
+            raise ValidationError("根据TestItem未找到对应的测试项目")
+
+        startdate = form.data.get("StartDate")
+        if startdate:
+            enddate = datetime.strptime(startdate, "%Y-%m-%d") + timedelta(
+                hours=float(obj_testitem.test_time)
+            )
+            form.data.update(
+                {
+                    "Product": obj_product.id,
+                    "Customer": obj_customer.id,
+                    "TestPeriod": obj_testitem.test_time,
+                    "Owner": obj_testitem.test_owner,
+                    "EndDate": datetime.strftime(enddate, "%Y-%m-%d"),
+                }
+            )
+        else:
+            raise ValidationError("StartDate未提供")
+
+    except (ValueError, ValidationError) as e:
+        form.add_error(None, str(e))
+
+    return form
+
+
+def add_schedules(request, checkout_id):
     template_name = "ortplans/edit_table1.html"
     redirect_view_name = "schedules"
     title_text = "排程编辑"
 
     if request.method == "GET":
-        form = ScheduleForm()
+        if checkout_id != 0:
+            obj = get_object_or_404(TCheckouts, id=checkout_id)
+            form = ScheduleForm(
+                initial={
+                    "PartNo": obj.PartNo,
+                    "SampleSize": obj.SN.count("\n") + 1,
+                    "Work_Order": obj.Work_Order,
+                    "StartDate": obj.checkout_date,
+                }
+            )
+        else:
+            form = ScheduleForm()
         return render(request, template_name, {"title": title_text, "form": form})
 
-    form = ScheduleForm(request.POST)
+    if "back" in request.POST:
+        return redirect(redirect_view_name)
+    data = request.POST.copy()
+    form = ScheduleForm(data)
+    form = deal_schedule_datas(form)
     if form.is_valid():
         form.save()
         return redirect(redirect_view_name)

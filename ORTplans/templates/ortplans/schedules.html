@@ -44,12 +44,13 @@
                     <th> <span>阶段</span> </th>
                     <th> <span>测试项目</span> </th>
                     <th> <span>样品数</span> </th>
-                    <th> <span>实验时间</span> </th>
+                    <th> <span>实验时间(h)</span> </th>
                     <th> <span>负责人</span> </th>
                     <th> <span>开始日期</span> </th>
                     <th> <span>结束日期</span> </th>
                     <th> <span>完成状况</span> </th>
                     <th> <span>上传系统</span> </th>
+                    <th> <span>工令</span> </th>
                     <th> <span>备注</span> </th>
                 </tr>
             </thead>
@@ -71,6 +72,7 @@
                     <td> {{ schedule.EndDate|date:"Y/m/d" }} </td>
                     <td> {{ schedule.get_Status_display }} </td>
                     <td> {{ schedule.get_Upload_Elab_display }} </td>
+                    <td> {{ schedule.Work_Order }} </td>
                     <td> {{ schedule.Remark }} </td>
                 </tr>
                 {% empty %}
@@ -84,7 +86,7 @@
 </div>
 
 <div class="list-group" id="schedules-menu">
-    <a class="list-group-item list-group-item-action" href="{% url 'add_schedules' %}">添加</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'add_schedules' checkout_id=0 %}">添加</a>
     <a class="list-group-item list-group-item-action" href="{% url 'edit_schedules' schedule_id=1 %}" id="editschedule">编辑</a>
     <a class="list-group-item list-group-item-action" href="{% url 'delete_schedules' schedule_id=1 %}" id="delschedule">删除</a>
 </div>
@@ -92,7 +94,7 @@
 <div class="list-group" id="schedules-th-menu">
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="list-group-item list-group-item-action" formaction="{% url 'add_schedules' %}">添加</button>
+        <button type="submit" class="list-group-item list-group-item-action" formaction="{% url 'add_schedules' checkout_id=0 %}">添加</button>
     </form>
 </div>
 

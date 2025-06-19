@@ -627,13 +627,21 @@
         "model": "ORTplans.tcustcode",
         "pk": 79,
         "fields": {
+            "cust_code": "HF",
+            "cust_name": "CISCO"
+        }
+    },
+    {
+        "model": "ORTplans.tcustcode",
+        "pk": 80,
+        "fields": {
             "cust_code": "G0",
             "cust_name": "GOOXI"
         }
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 80,
+        "pk": 81,
         "fields": {
             "cust_code": "G2",
             "cust_name": "宸圓科技"
@@ -641,7 +649,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 81,
+        "pk": 82,
         "fields": {
             "cust_code": "G5",
             "cust_name": "比特大陸"
@@ -649,7 +657,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 82,
+        "pk": 83,
         "fields": {
             "cust_code": "GA",
             "cust_name": "DAHUA"
@@ -657,7 +665,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 83,
+        "pk": 84,
         "fields": {
             "cust_code": "GQ",
             "cust_name": "HPE"
@@ -665,7 +673,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 84,
+        "pk": 85,
         "fields": {
             "cust_code": "WC",
             "cust_name": "OPTEX"
@@ -673,7 +681,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 85,
+        "pk": 86,
         "fields": {
             "cust_code": "Y1",
             "cust_name": "EILI"
@@ -681,7 +689,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 86,
+        "pk": 87,
         "fields": {
             "cust_code": "YD",
             "cust_name": "DLH"
@@ -689,7 +697,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 87,
+        "pk": 88,
         "fields": {
             "cust_code": "YK",
             "cust_name": "ANTEC"
@@ -697,7 +705,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 88,
+        "pk": 89,
         "fields": {
             "cust_code": "YT",
             "cust_name": "TARGUS"
@@ -705,7 +713,7 @@
     },
     {
         "model": "ORTplans.tcustcode",
-        "pk": 89,
+        "pk": 90,
         "fields": {
             "cust_code": "ZA",
             "cust_name": "ASUS"

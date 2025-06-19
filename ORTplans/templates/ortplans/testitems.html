@@ -29,6 +29,7 @@
                     <th> <span>测试项目</span> </th>
                     <th> <span>测试时间(h)</span> </th>
                     <th> <span>测试负责人</span> </th>
+                    <th> <span>样品处理</span> </th>
                     <th> <span>备注</span> </th>
                 </tr>
             </thead>
@@ -40,6 +41,7 @@
                     <td> {{ obj.test_item }} </td>
                     <td> {{ obj.test_time }} </td>
                     <td> {{ obj.test_owner }} </td>
+                    <td> {{ obj.dispose }} </td>
                     <td> {{ obj.Remark }} </td>
                 </tr>
                 {% empty %}

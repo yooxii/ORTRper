@@ -41,7 +41,6 @@
                     <th> <span class="text-nowrap">领用日期</span> </th>
                     <th> <span class="text-nowrap">机种名称</span> </th>
                     <th> <span class="text-nowrap">数量</span> </th>
-                    <th> <span class="text-nowrap">测试项目</span> </th>
                     <th> <span class="text-nowrap">序列号</span> </th>
                     <th> <span class="text-nowrap">周期</span> </th>
                     <th> <span class="text-nowrap">版本</span> </th>
@@ -60,7 +59,6 @@
                     <td class="align-middle text-nowrap"> {{ checkout.checkout_date|date:"Y/m/d" }} </td>
                     <td class="align-middle text-nowrap"> {{ checkout.PartNo }} </td>
                     <td class="align-middle"> {{ checkout.checkout_qty }} </td>
-                    <td class="align-middle"> {{ checkout.TestItem }} </td>
                     <td class="align-middle" style="font-size: small;"> {{ checkout.SN|escape|linebreaksbr }} </td>
                     <td class="align-middle"> {{ checkout.DC }} </td>
                     <td class="align-middle"> {{ checkout.REV }} </td>

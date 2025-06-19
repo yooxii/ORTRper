@@ -37,6 +37,9 @@ customer = read_csv_to_fixtures(
 producttype = read_csv_to_fixtures(
     FILE_DIR_.joinpath("static/data/producttype.csv"), "ORTplans.tproducttype"
 )
+testitem = read_csv_to_fixtures(
+    FILE_DIR_.joinpath("static/data/testitem.csv"), "ORTplans.ttestitem"
+)
 
 if __name__ == "__main__":
     with open(FILE_DIR_.joinpath("fixtures/customer.json"), "w", encoding="utf-8") as f:
@@ -45,3 +48,5 @@ if __name__ == "__main__":
         FILE_DIR_.joinpath("fixtures/producttype.json"), "w", encoding="utf-8"
     ) as f:
         json.dump(producttype, f, ensure_ascii=False, indent=4)
+    with open(FILE_DIR_.joinpath("fixtures/testitem.json"), "w", encoding="utf-8") as f:
+        json.dump(testitem, f, ensure_ascii=False, indent=4)

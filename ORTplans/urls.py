@@ -23,7 +23,7 @@ urlpatterns = [
     path("schedules", views.schedules, name="schedules"),
     path("import_schedules", views.import_schedules, name="import_schedules"),
     path("export_schedules", views.export_schedules, name="export_schedules"),
-    path("add_schedules", views.add_schedules, name="add_schedules"),
+    path("<int:checkout_id>/add_schedules", views.add_schedules, name="add_schedules"),
     path(
         "<int:schedule_id>/edit_schedules", views.edit_schedules, name="edit_schedules"
     ),

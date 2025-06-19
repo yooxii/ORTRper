@@ -35,11 +35,21 @@ class TTechnician(models.Model):
 class TTestItem(models.Model):
     id = models.AutoField(primary_key=True)
     test_item = models.CharField(verbose_name="测试项目", max_length=50, unique=True)
-    test_time = models.IntegerField(verbose_name="测试时间(h)")
-    test_owner = models.ManyToManyField(
+    test_time = models.FloatField(verbose_name="测试时间(h)")
+    test_owner = models.CharField(
         verbose_name="测试负责人",
-        related_name="test_owner",
-        to="TTechnician",
+        max_length=50,
+        null=True,
+        blank=True,
+    )
+    dispose = models.CharField(
+        verbose_name="样品处理",
+        max_length=25,
+        choices=(
+            ("回线", "回线"),
+            ("报废", "报废"),
+        ),
+        null=True,
         blank=True,
     )
     Remark = models.TextField(verbose_name="备注", null=True, blank=True)
@@ -83,11 +93,12 @@ class TSchedule(models.Model):
         verbose_name="测试项目",
         to="TTestItem",
         to_field="id",
+        default=29,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
     )
-    SampleSize = models.IntegerField(verbose_name="样品数", default=1)
+    SampleSize = models.IntegerField(verbose_name="样品数", default=3)
     TestPeriod = models.IntegerField(verbose_name="试验时间")
     Owner = models.CharField(
         verbose_name="负责人", null=True, blank=True, max_length=50
@@ -108,6 +119,13 @@ class TSchedule(models.Model):
         default=False,
         choices=((False, "未上传"), (True, "已上传")),
     )
+    Work_Order = models.CharField(
+        verbose_name=("工令"),
+        max_length=40,
+        unique=True,
+        null=True,
+        blank=True,
+    )
     Remark = models.TextField(verbose_name="备注", null=True, blank=True)
 
     def __str__(self):
@@ -121,16 +139,13 @@ class TCheckouts(models.Model):
     )
     checkout_no = models.CharField(verbose_name="领用单号", max_length=20, unique=True)
     PartNo = models.CharField(verbose_name="机种名称", max_length=15)
-    TestItem = models.CharField(
-        verbose_name="测试项目", max_length=50, null=True, blank=True
-    )
     checkout_qty = models.IntegerField(
         verbose_name="领出数量",
     )
     SN = models.TextField(verbose_name="序列号", unique=True)
     DC = models.CharField(verbose_name="周期", max_length=8)
     REV = models.CharField(verbose_name="版本", max_length=10)
-    Work_Order = models.CharField(verbose_name="工令", max_length=40)
+    Work_Order = models.CharField(verbose_name="工令", max_length=40, unique=True)
     Remarks = models.TextField(verbose_name="备注", null=True, blank=True)
     checkout_status = models.IntegerField(
         verbose_name="领出状态",
@@ -140,4 +155,4 @@ class TCheckouts(models.Model):
     )
 
     def __str__(self):
-        return self.checkout_no
+        return self.Work_Order
