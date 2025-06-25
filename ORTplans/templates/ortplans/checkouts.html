@@ -1,6 +1,8 @@
 {% extends "ortplans/ort_base.html" %}
+{% load static %}
+{% load ORTplans_extras %}
 
-{% block header %}{% load static %}<h1>{% block title %}领用{% endblock title %}</h1>{% endblock header %}
+{% block header %}<h1>{% block title %}领用{% endblock title %}</h1>{% endblock header %}
 
 {% block content %}
 <style>
@@ -59,7 +61,8 @@
                     <td class="align-middle text-nowrap"> {{ checkout.checkout_date|date:"Y/m/d" }} </td>
                     <td class="align-middle text-nowrap"> {{ checkout.PartNo }} </td>
                     <td class="align-middle"> {{ checkout.checkout_qty }} </td>
-                    <td class="align-middle" style="font-size: small;"> {{ checkout.SN|escape|linebreaksbr }} </td>
+                    <td class="align-middle" style="font-size: small;"> {% if checkout.sn_file %}<a href="{{ checkout.sn_file.url }}"
+                          target="_blank">{{checkout.sn_file.name|basename}}</a>{% else %}{{ checkout.SN|escape|linebreaksbr }}{% endif %} </td>
                     <td class="align-middle"> {{ checkout.DC }} </td>
                     <td class="align-middle"> {{ checkout.REV }} </td>
                     <td class="align-middle text-nowrap"> {{ checkout.Work_Order }} </td>

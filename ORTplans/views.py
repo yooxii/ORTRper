@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 # Create your views here.
 from ORTplans.models import *
+from ORTplans.models import TCheckouts
 from ORTplans.ortplanforms import *
 
 
@@ -116,12 +117,27 @@ def edit_checkouts(request, checkout_id=0):
         form = form_class(instance=obj)
         return render(request, template_name, {"title": title_text, "form": form})
 
+    # 返回上一页
     if "back" in request.POST:
         return redirect(redirect_view_name)
-    obj = get_object_or_404(model_class, id=object_id)
-    form = form_class(request.POST, instance=obj)
+
+    # 初始化表单
+    obj: TCheckouts = get_object_or_404(model_class, id=object_id)
+    form = form_class(request.POST, request.FILES, instance=obj)
+
+    # 处理删除文件
+    clear_file = request.POST.get("sn_file-clear", "off")
+    if clear_file == "on":
+        obj.sn_file.delete(save=False)
+
     if form.is_valid():
+        old = get_object_or_404(model_class, id=object_id)
+        # 如果有新文件上传，先删除旧文件，再保存
+        if "sn_file" in request.FILES and old and old.sn_file:
+            old.sn_file.delete(save=False)
         form.save()
+
+        # 跳转到排程编辑页面
         if "save_and_schedule" in request.POST:
             sch = TSchedule.objects.filter(Work_Order=obj.Work_Order).first()
             if sch:
@@ -145,7 +161,7 @@ def add_checkouts(request):
 
     if "back" in request.POST:
         return redirect(redirect_view_name)
-    form = form_class(request.POST)
+    form = form_class(request.POST, request.FILES)
     if form.is_valid():
         obj = form.save()
         if "save_and_schedule" in request.POST:
@@ -254,10 +270,24 @@ def add_schedules(request, checkout_id):
     title_text = "排程编辑"
 
     if request.method == "GET":
+        ###### 自动生成JobNo ######
+        latest_entry = TSchedule.objects.order_by("-id").first()
+        latest_JobNo = latest_entry.JobNo if latest_entry else "01"
+        now = datetime.now()
+        year_month = now.strftime("%y%m")
+        # 如果最新JobNo的年月和当前年月相同，则自动生成下一个JobNo
+        if year_month in latest_JobNo:
+            cur_JobNo = "RT" + str(int(latest_JobNo[-6:]) + 1)
+        # 否则，生成新的年月的JobNo
+        else:
+            cur_JobNo = "RT" + year_month + "01"
+        ###### 自动生成JobNo ######
+
         if checkout_id != 0:
             obj = get_object_or_404(TCheckouts, id=checkout_id)
             form = ScheduleForm(
                 initial={
+                    "JobNo": cur_JobNo,
                     "PartNo": obj.PartNo,
                     "SampleSize": obj.SN.count("\n") + 1,
                     "Work_Order": obj.Work_Order,
@@ -265,7 +295,11 @@ def add_schedules(request, checkout_id):
                 }
             )
         else:
-            form = ScheduleForm()
+            form = ScheduleForm(
+                initial={
+                    "JobNo": cur_JobNo,
+                }
+            )
         return render(request, template_name, {"title": title_text, "form": form})
 
     if "back" in request.POST:

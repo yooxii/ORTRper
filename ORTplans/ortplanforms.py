@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, Div, Field
+from crispy_forms.layout import Layout, Submit, Row, Column, Div, Field, Button
 
 
 class CustCodeForm(forms.ModelForm):
@@ -142,6 +142,7 @@ class CheckoutForm(forms.ModelForm):
             "checkout_status",
             "SN",
             "Remarks",
+            "sn_file",
         ]
         widgets = {
             "checkout_date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
@@ -170,14 +171,19 @@ class CheckoutForm(forms.ModelForm):
             ),
             Row(
                 Column("SN", css_class="form-group col-md-6 mb-0"),
-                Column("Remarks", css_class="form-group col-md-6 mb-0"),
+                Column("sn_file", css_class="form-group col-md-6 mb-0"),
+                css_class="form-row",
+            ),
+            Row(
+                Column("Remarks", css_class="form-group col-md-12 mb-0"),
                 css_class="form-row",
             ),
             Div(
-                Submit(
+                Button(
                     "back",
                     "返回",
                     css_class="button white",
+                    onclick="location.href='/checkouts/'",
                 ),
                 Submit("save", "保存", css_class="button white"),
                 Submit(
@@ -187,6 +193,16 @@ class CheckoutForm(forms.ModelForm):
                 ),
             ),
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        sn_file = cleaned_data.get("sn_file")
+        sn = cleaned_data.get("SN")
+        if not sn_file and not sn:
+            raise forms.ValidationError("请上传SN文件或输入SN信息")
+        if sn_file:
+            cleaned_data["SN"] = ""
+        return cleaned_data
 
 
 class ScheduleForm(forms.ModelForm):
@@ -232,11 +248,11 @@ class ScheduleForm(forms.ModelForm):
                 # Column("TestPeriod", css_class="form-group col-md-1 mb-0"),
                 css_class="form-row",
             ),
-            Row(
-                # Column("Customer", css_class="form-group col-md-3 mb-0"),
-                # Column("Product", css_class="form-group col-md-3 mb-0"),
-                css_class="form-row",
-            ),
+            # Row(
+            #     Column("Customer", css_class="form-group col-md-3 mb-0"),
+            #     Column("Product", css_class="form-group col-md-3 mb-0"),
+            #     css_class="form-row",
+            # ),
             Row(
                 Column("StartDate", css_class="form-group col-md-3 mb-0"),
                 Column("EndDate", css_class="form-group col-md-3 mb-0"),
@@ -250,7 +266,7 @@ class ScheduleForm(forms.ModelForm):
                 css_class="form-row",
             ),
             Div(
-                Submit(
+                Button(
                     "back",
                     "返回",
                     css_class="button white",
