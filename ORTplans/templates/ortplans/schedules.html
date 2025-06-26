@@ -56,7 +56,7 @@
             </thead>
 
             <tbody>
-                {% for schedule in all_schedules %}
+                {% for schedule in object_list %}
                 <tr data-schedule-id="{{ schedule.id }}">
                     <td> {{ schedule.JobNo }} </td>
                     <td> {{ schedule.get_QRT_display }} </td>
@@ -87,8 +87,8 @@
 
 <div class="list-group" id="schedules-menu">
     <a class="list-group-item list-group-item-action" href="{% url 'add_schedules' checkout_id=0 %}">添加</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'edit_schedules' schedule_id=1 %}" id="editschedule">编辑</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'delete_schedules' schedule_id=1 %}" id="delschedule">删除</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'edit_schedules' pk=1 %}" id="editschedule">编辑</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'delete_schedules' pk=1 %}" id="delschedule">删除</a>
 </div>
 
 <div class="list-group" id="schedules-th-menu">
@@ -103,11 +103,11 @@
         event.preventDefault();
 
         // 获取当前行的ID
-        var scheduleId = $(this).data('schedule-id');
+        const scheduleId = $(this).data('schedule-id');
         console.log(scheduleId);
 
-        $("#editschedule").attr("href", "{% url 'edit_schedules' schedule_id=1 %}".replace('1', scheduleId));
-        $("#delschedule").attr("href", "{% url 'edit_schedules' schedule_id=1 %}".replace('1', scheduleId));
+        $("#editschedule").attr("href", "{% url 'edit_schedules' pk=1 %}".replace('1', scheduleId));
+        $("#delschedule").attr("href", "{% url 'delete_schedules' pk=1 %}".replace('1', scheduleId));
 
         // 在鼠标点击的位置显示自定义右键菜单
         $("#schedules-menu").css({
@@ -130,6 +130,12 @@
         // 隐藏自定义右键菜单
         $("#schedules-menu").hide();
         $("#schedules-th-menu").hide();
+    });
+
+    $(document).on("click", "#delschedule",function (event) {
+        if (!confirm("确认删除吗？")) {
+            event.preventDefault();
+        }
     });
 
 </script>

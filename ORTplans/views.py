@@ -3,9 +3,10 @@ from django.http import HttpResponseBadRequest
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 
+from django.views import generic
+
 # Create your views here.
 from ORTplans.models import *
-from ORTplans.models import TCheckouts
 from ORTplans.ortplanforms import *
 
 
@@ -168,7 +169,6 @@ def add_checkouts(request):
             return redirect("add_schedules", checkout_id=obj.id)
         else:
             return redirect(redirect_view_name)
-        return redirect(redirect_view_name)
     else:
         return render(request, template_name, {"title": title_text, "form": form})
 
@@ -180,12 +180,9 @@ def delete_checkouts(request, checkout_id):
 ################# Schedules #################
 
 
-def schedules(request):
-    all_schedules = TSchedule.objects.all()
-    context = {
-        "all_schedules": all_schedules,
-    }
-    return render(request, "ortplans/schedules.html", context)
+class SchedulesView(generic.ListView):
+    model = TSchedule
+    template_name = "ortplans/schedules.html"
 
 
 def import_schedules(request):
@@ -196,28 +193,36 @@ def export_schedules(request):
     return render(request, "ortplans/export_schedules.html")
 
 
-def edit_schedules(request, schedule_id=0):
+class EditSchedulesView(generic.DetailView):
+    model = TSchedule
+    form_class = ScheduleForm
     template_name = "ortplans/edit_table1.html"
     redirect_view_name = "schedules"
     title_text = "排程编辑"
+    obj = None
 
-    if request.method == "GET":
-        obj = get_object_or_404(TSchedule, id=schedule_id)
-        form = ScheduleForm(instance=obj)
-        return render(request, template_name, {"title": title_text, "form": form})
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.obj = self.get_object()
 
-    if "back" in request.POST:
-        return redirect(redirect_view_name)
-    obj = get_object_or_404(TSchedule, id=schedule_id)
-    data = request.POST.copy()
-    form = ScheduleForm(data, instance=obj)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = self.title_text
+        context["form"] = self.form_class(instance=self.obj)
+        return context
 
-    form = deal_schedule_datas(form)
-    if form.is_valid():
-        form.save()
-        return redirect(redirect_view_name)
-    else:
-        return render(request, template_name, {"title": title_text, "form": form})
+    def post(self, request, *args, **kwargs):
+        if "back" in request.POST:
+            return redirect(self.redirect_view_name)
+        data = request.POST.copy()
+        form = self.form_class(data, instance=self.obj)
+
+        form = deal_schedule_datas(form)
+        if form.is_valid():
+            form.save()
+            return redirect(self.redirect_view_name)
+        else:
+            return render(request, self.template_name, {"title": self.title_text, "form": form})
 
 
 def deal_schedule_datas(form: ScheduleForm):
@@ -238,15 +243,15 @@ def deal_schedule_datas(form: ScheduleForm):
     """
     try:
         model = form.data.get("PartNo")
-        testitem_id = form.data.get("TestItem")
-        startdate = form.data.get("StartDate")
+        testing_id = form.data.get("TestItem")
+        start_date = form.data.get("StartDate")
 
-        if not model or not testitem_id:
+        if not model or not testing_id:
             raise ValidationError("PartNo或TestItem未提供")
 
         obj_product = TProductType.objects.filter(product_code=model[:2]).first()
         obj_customer = TCustCode.objects.filter(cust_code=model[7:9]).first()
-        obj_testitem = TTestItem.objects.filter(id=testitem_id).first()
+        obj_test_item = TTestItem.objects.filter(id=testing_id).first()
 
         if not obj_product:
             raise ValidationError("根据PartNo未找到对应的产品类型")
@@ -254,13 +259,11 @@ def deal_schedule_datas(form: ScheduleForm):
         if not obj_customer:
             raise ValidationError("根据PartNo未找到对应的客户代码")
 
-        if not obj_testitem:
+        if not obj_test_item:
             raise ValidationError("根据TestItem未找到对应的测试项目")
 
-        if startdate:
-            enddate = datetime.strptime(startdate, "%Y-%m-%d") + timedelta(
-                hours=float(obj_testitem.test_time)
-            )
+        if start_date:
+            end_date = datetime.strptime(start_date, "%Y-%m-%d") + timedelta(hours=float(obj_test_item.test_time))
         else:
             raise ValidationError("StartDate未提供")
 
@@ -268,9 +271,9 @@ def deal_schedule_datas(form: ScheduleForm):
             {
                 "Product": obj_product.id,
                 "Customer": obj_customer.id,
-                "TestPeriod": obj_testitem.test_time,
-                "Owner": obj_testitem.test_owner,
-                "EndDate": datetime.strftime(enddate, "%Y-%m-%d"),
+                "TestPeriod": obj_test_item.test_time,
+                "Owner": obj_test_item.test_owner,
+                "EndDate": datetime.strftime(end_date, "%Y-%m-%d"),
             }
         )
 
@@ -288,22 +291,22 @@ def add_schedules(request, checkout_id):
     if request.method == "GET":
         ###### 自动生成JobNo ######
         latest_entry = TSchedule.objects.order_by("-id").first()
-        latest_JobNo = latest_entry.JobNo if latest_entry else "01"
+        latest_job_no = latest_entry.JobNo if latest_entry else "01"
         now = datetime.now()
         year_month = now.strftime("%y%m")
         # 如果最新JobNo的年月和当前年月相同，则自动生成下一个JobNo
-        if year_month in latest_JobNo:
-            cur_JobNo = "RT" + str(int(latest_JobNo[-6:]) + 1)
+        if year_month in latest_job_no:
+            cur_job_no = "RT" + str(int(latest_job_no[-6:]) + 1)
         # 否则，生成新的年月的JobNo
         else:
-            cur_JobNo = "RT" + year_month + "01"
+            cur_job_no = "RT" + year_month + "01"
         ###### 自动生成JobNo ######
 
         if checkout_id != 0:
             obj = get_object_or_404(TCheckouts, id=checkout_id)
             form = ScheduleForm(
                 initial={
-                    "JobNo": cur_JobNo,
+                    "JobNo": cur_job_no,
                     "PartNo": obj.PartNo,
                     "SampleSize": obj.checkout_qty,
                     "Work_Order": obj.Work_Order,
@@ -313,7 +316,7 @@ def add_schedules(request, checkout_id):
         else:
             form = ScheduleForm(
                 initial={
-                    "JobNo": cur_JobNo,
+                    "JobNo": cur_job_no,
                 }
             )
         return render(request, template_name, {"title": title_text, "form": form})
@@ -330,8 +333,8 @@ def add_schedules(request, checkout_id):
         return render(request, template_name, {"title": title_text, "form": form})
 
 
-def delete_schedules(request, schedule_id):
-    return handle_delete(request, TSchedule, schedule_id, "schedules")
+def delete_schedules(request, pk):
+    return handle_delete(request, TSchedule, pk, "schedules")
 
 
 ################# Technicians #################
@@ -437,9 +440,7 @@ def edit_customers(request, customer_id=0):
 
 
 def add_customers(request):
-    return render_add_form(
-        request, CustCodeForm, "ortplans/edit_table1.html", "custproducts", "客户添加"
-    )
+    return render_add_form(request, CustCodeForm, "ortplans/edit_table1.html", "custproducts", "客户添加")
 
 
 def delete_customers(request, customer_id):
