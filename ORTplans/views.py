@@ -221,9 +221,25 @@ def edit_schedules(request, schedule_id=0):
 
 
 def deal_schedule_datas(form: ScheduleForm):
+    """处理排程表单数据
+
+    Args:
+        form (ScheduleForm): 排程表单类实例
+
+    Raises:
+        ValidationError: 未找到产品类型
+        ValidationError: 未找到客户代码
+        ValidationError: 未找到测试项目
+        ValidationError: 未提供开始日期
+        ValidationError: 未提供机种名或测试项目
+
+    Returns:
+        ScheduleForm: 处理后的排程表单实例
+    """
     try:
         model = form.data.get("PartNo")
         testitem_id = form.data.get("TestItem")
+        startdate = form.data.get("StartDate")
 
         if not model or not testitem_id:
             raise ValidationError("PartNo或TestItem未提供")
@@ -241,22 +257,22 @@ def deal_schedule_datas(form: ScheduleForm):
         if not obj_testitem:
             raise ValidationError("根据TestItem未找到对应的测试项目")
 
-        startdate = form.data.get("StartDate")
         if startdate:
             enddate = datetime.strptime(startdate, "%Y-%m-%d") + timedelta(
                 hours=float(obj_testitem.test_time)
             )
-            form.data.update(
-                {
-                    "Product": obj_product.id,
-                    "Customer": obj_customer.id,
-                    "TestPeriod": obj_testitem.test_time,
-                    "Owner": obj_testitem.test_owner,
-                    "EndDate": datetime.strftime(enddate, "%Y-%m-%d"),
-                }
-            )
         else:
             raise ValidationError("StartDate未提供")
+
+        form.data.update(
+            {
+                "Product": obj_product.id,
+                "Customer": obj_customer.id,
+                "TestPeriod": obj_testitem.test_time,
+                "Owner": obj_testitem.test_owner,
+                "EndDate": datetime.strftime(enddate, "%Y-%m-%d"),
+            }
+        )
 
     except (ValueError, ValidationError) as e:
         form.add_error(None, str(e))
@@ -289,7 +305,7 @@ def add_schedules(request, checkout_id):
                 initial={
                     "JobNo": cur_JobNo,
                     "PartNo": obj.PartNo,
-                    "SampleSize": obj.SN.count("\n") + 1,
+                    "SampleSize": obj.checkout_qty,
                     "Work_Order": obj.Work_Order,
                     "StartDate": obj.checkout_date,
                 }

@@ -182,8 +182,8 @@ class CheckoutForm(forms.ModelForm):
                 Button(
                     "back",
                     "返回",
-                    css_class="button white",
-                    onclick="location.href='/checkouts/'",
+                    css_class="btn btn-secondary",
+                    onclick="location.href='/ORTplans/checkouts'",
                 ),
                 Submit("save", "保存", css_class="button white"),
                 Submit(
@@ -245,14 +245,8 @@ class ScheduleForm(forms.ModelForm):
                 Column("SampleSize", css_class="form-group col-md-1 mb-0"),
                 Column("TestItem", css_class="form-group col-md-3 mb-0"),
                 Column("Work_Order", css_class="form-group col-md-3 mb-0"),
-                # Column("TestPeriod", css_class="form-group col-md-1 mb-0"),
                 css_class="form-row",
             ),
-            # Row(
-            #     Column("Customer", css_class="form-group col-md-3 mb-0"),
-            #     Column("Product", css_class="form-group col-md-3 mb-0"),
-            #     css_class="form-row",
-            # ),
             Row(
                 Column("StartDate", css_class="form-group col-md-3 mb-0"),
                 Column("EndDate", css_class="form-group col-md-3 mb-0"),
@@ -261,7 +255,6 @@ class ScheduleForm(forms.ModelForm):
                 css_class="form-row",
             ),
             Row(
-                # Column("Owner", css_class="form-group col-md-6 mb-0"),
                 Column("Remark", css_class="form-group col-md-6 mb-0"),
                 css_class="form-row",
             ),
@@ -269,8 +262,8 @@ class ScheduleForm(forms.ModelForm):
                 Button(
                     "back",
                     "返回",
-                    css_class="button white",
-                    onclick="location.href='/schedule/",
+                    css_class="btn btn-secondary",
+                    onclick="location.href='/ORTplans/schedules'",
                 ),
                 Submit("save", "保存", css_class="button white"),
             ),
