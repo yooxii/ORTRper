@@ -2,6 +2,8 @@
   <dictionary name="project">
     <words>
       <w>custproducts</w>
+      <w>endblock</w>
+      <w>endfor</w>
       <w>ortplans</w>
       <w>testitems</w>
     </words>

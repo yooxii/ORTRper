@@ -17,6 +17,7 @@
     }
 </style>
 <!-- <link rel="stylesheet" href="{% static 'css/checkouts.css' %}" /> -->
+<script src="{% static 'js/datas_table.js' %}"></script>
 <div class="peek">
     <h3>领用信息</h3>
     {% if not checkouts_edit_btns %}
@@ -35,7 +36,7 @@
     {% endif %}
     {% block checkouts_edit_btns %} {% endblock checkouts_edit_btns %}
     <div class="table-responsive">
-        <table class="table table-hover table-striped table-bordered table-sm" id="checkouts_table" name="checkouts_peek">
+        <table class="table table-hover table-striped table-bordered table-sm" id="datas_table">
             <thead class="thead-dark">
                 <tr>
                     <!-- <th> <span>NO.</span> </th> -->
@@ -53,7 +54,7 @@
             </thead>
 
             <tbody>
-                {% for checkout in all_checkouts %}
+                {% for checkout in object_list %}
                 <tr data-checkout-id="{{ checkout.id }}">
                     {% block checkouts_edit_checkbox_input %} {% endblock checkouts_edit_checkbox_input %}
                     <!-- <td class="text-center align-middle"> {{ checkout.id }} </td> -->
@@ -83,8 +84,8 @@
 
 <div class="list-group" id="rclick-menu">
     <a class="list-group-item list-group-item-action" href="{% url 'add_checkouts' %}">添加</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'edit_checkouts' checkout_id=1 %}" id="editCheckout">编辑</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'delete_checkouts' checkout_id=1 %}" id="delCheckout">删除</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'edit_checkouts' pk=1 %}" id="edit_data">编辑</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'delete_checkouts' pk=1 %}" id="delete_data">删除</a>
 </div>
 
 <div class="list-group" id="rclick-th-menu">
@@ -95,23 +96,17 @@
 </div>
 
 <script>
-    function hideMenu() {
-        // 隐藏自定义右键菜单
-        $("#rclick-menu").hide();
-        $("#rclick-th-menu").hide();
-    }
-
-    $(document).on("contextmenu", "#checkouts_table tbody tr", function (event) {
+    $(document).on("contextmenu", "#datas_table tbody tr", function (event) {
         event.preventDefault();
 
         // 获取当前行的ID
-        var checkoutId = $(this).data('checkout-id');
-        console.log(checkoutId);
+        const row_id = $(this).data('checkout-id');
+        console.log(row_id);
 
         hideMenu();
 
-        $("#editCheckout").attr("href", "{% url 'edit_checkouts' checkout_id=1 %}".replace('1', checkoutId));
-        $("#delCheckout").attr("href", "{% url 'delete_checkouts' checkout_id=1 %}".replace('1', checkoutId));
+        $("#edit_data").attr("href", "{% url 'edit_checkouts' pk=1 %}".replace('1', row_id));
+        $("#delete_data").attr("href", "{% url 'delete_checkouts' pk=1 %}".replace('1', row_id));
 
         // 在鼠标点击的位置显示自定义右键菜单
         $("#rclick-menu").css({
@@ -119,22 +114,5 @@
             left: event.clientX
         }).show();
     });
-
-    $(document).on("contextmenu", "#checkouts_table thead th", function (event) {
-        event.preventDefault();
-
-        hideMenu();
-
-        $("#rclick-th-menu").css({
-            top: event.clientY,
-            left: event.clientX
-        }).show();
-
-    });
-
-    $(document).on("click", function () {
-        hideMenu();
-    });
-
 </script>
 {% endblock content %}

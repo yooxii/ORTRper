@@ -4,8 +4,8 @@
 
 {% block content %}
 <style>
-    #schedules-menu,
-    #schedules-th-menu {
+    #rclick-menu,
+    #rclick-th-menu {
         display: none;
         position: absolute;
         background-color: #fff;
@@ -15,6 +15,7 @@
     }
 </style>
 <!-- <link rel="stylesheet" href="{% static 'css/schedules.css' %}" /> -->
+<script src="{% static 'js/datas_table.js' %}"></script>
 <div class="peek">
     <h3>排程管理</h3>
     {% if not schedules_edit_btns %}
@@ -32,7 +33,7 @@
     </form>
     {% endif %}
     <div class="table-responsive">
-        <table class="table table-hover table-striped table-bordered table-sm" id="schedules_table" name="schedule_peek">
+        <table class="table table-hover table-striped table-bordered table-sm" id="datas_table">
             <thead class="thead-dark">
                 <tr>
                     <!-- <th> <span>NO.</span> </th> -->
@@ -85,58 +86,37 @@
     </div>
 </div>
 
-<div class="list-group" id="schedules-menu">
-    <a class="list-group-item list-group-item-action" href="{% url 'add_schedules' checkout_id=0 %}">添加</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'edit_schedules' pk=1 %}" id="editschedule">编辑</a>
-    <a class="list-group-item list-group-item-action" href="{% url 'delete_schedules' pk=1 %}" id="delschedule">删除</a>
+<div class="list-group" id="rclick-menu">
+    <a class="list-group-item list-group-item-action" href="{% url 'add_schedules' pk=0 %}">添加</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'edit_schedules' pk=1 %}" id="edit_data">编辑</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'delete_schedules' pk=1 %}" id="delete_data">删除</a>
 </div>
 
-<div class="list-group" id="schedules-th-menu">
+<div class="list-group" id="rclick-th-menu">
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="list-group-item list-group-item-action" formaction="{% url 'add_schedules' checkout_id=0 %}">添加</button>
+        <button type="submit" class="list-group-item list-group-item-action" formaction="{% url 'add_schedules' pk=0 %}">添加</button>
     </form>
 </div>
 
 <script>
-    $(document).on("contextmenu", "#schedules_table tbody tr", function (event) {
+    $(document).on("contextmenu", "#datas_table tbody tr", function (event) {
         event.preventDefault();
 
         // 获取当前行的ID
-        const scheduleId = $(this).data('schedule-id');
-        console.log(scheduleId);
+        const row_id = $(this).data('schedule-id');
+        console.log(row_id);
 
-        $("#editschedule").attr("href", "{% url 'edit_schedules' pk=1 %}".replace('1', scheduleId));
-        $("#delschedule").attr("href", "{% url 'delete_schedules' pk=1 %}".replace('1', scheduleId));
+        hideMenu();
+
+        $("#edit_data").attr("href", "{% url 'edit_schedules' pk=1 %}".replace('1', row_id));
+        $("#delete_data").attr("href", "{% url 'delete_schedules' pk=1 %}".replace('1', row_id));
 
         // 在鼠标点击的位置显示自定义右键菜单
-        $("#schedules-menu").css({
+        $("#rclick-menu").css({
             top: event.clientY,
             left: event.clientX
         }).show();
     });
-
-    $(document).on("contextmenu", "#schedules_table thead th", function (event) {
-        event.preventDefault();
-
-        $("#schedules-th-menu").css({
-            top: event.clientY,
-            left: event.clientX
-        }).show();
-
-    });
-
-    $(document).on("click", function () {
-        // 隐藏自定义右键菜单
-        $("#schedules-menu").hide();
-        $("#schedules-th-menu").hide();
-    });
-
-    $(document).on("click", "#delschedule",function (event) {
-        if (!confirm("确认删除吗？")) {
-            event.preventDefault();
-        }
-    });
-
 </script>
 {% endblock content %}

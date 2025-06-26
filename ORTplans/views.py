@@ -17,15 +17,7 @@ def index(request):
 ################# Common Functions #################
 
 
-def render_edit_form(
-    request,
-    model_class,
-    form_class,
-    object_id,
-    template_name,
-    redirect_view_name,
-    title_text,
-):
+def render_edit_form(request, model_class, form_class, object_id, template_name, redirect_view_name, title_text):
     """编辑函数模板
 
     Args:
@@ -89,6 +81,11 @@ def handle_delete(request, model_class, object_id, redirect_view_name):
 ################# Checkouts #################
 
 
+class CheckoutsView(generic.ListView):
+    model = TCheckouts
+    template_name = "ortplans/checkouts.html"
+
+
 def checkouts(request):
     all_checkouts = TCheckouts.objects.all()
     context = {
@@ -105,11 +102,11 @@ def export_checkouts(request):
     return render(request, "ortplans/export_checkouts.html")
 
 
-def edit_checkouts(request, checkout_id=0):
+def edit_checkouts(request, pk=0):
     model_class = TCheckouts
     form_class = CheckoutForm
-    object_id = checkout_id
     template_name = "ortplans/edit_table1.html"
+    object_id = pk
     redirect_view_name = "checkouts"
     title_text = "领用编辑"
 
@@ -143,7 +140,7 @@ def edit_checkouts(request, checkout_id=0):
             sch = TSchedule.objects.filter(Work_Order=obj.Work_Order).first()
             if sch:
                 return redirect("edit_schedules", sch.id)
-            return redirect("add_schedules", checkout_id=obj.id)
+            return redirect("add_schedules", pk=obj.id)
         else:
             return redirect(redirect_view_name)
     else:
@@ -166,15 +163,15 @@ def add_checkouts(request):
     if form.is_valid():
         obj = form.save()
         if "save_and_schedule" in request.POST:
-            return redirect("add_schedules", checkout_id=obj.id)
+            return redirect("add_schedules", pk=obj.id)
         else:
             return redirect(redirect_view_name)
     else:
         return render(request, template_name, {"title": title_text, "form": form})
 
 
-def delete_checkouts(request, checkout_id):
-    return handle_delete(request, TCheckouts, checkout_id, "checkouts")
+def delete_checkouts(request, pk):
+    return handle_delete(request, TCheckouts, pk, "checkouts")
 
 
 ################# Schedules #################
