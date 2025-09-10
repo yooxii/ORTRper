@@ -15,9 +15,21 @@
         min-width: 120px;
         z-index: 1;
     }
+    
+    /* 添加长内容处理样式 */
+    .content-ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
 </style>
-<!-- <link rel="stylesheet" href="{% static 'css/checkouts.css' %}" /> -->
+<!-- 引入新的CSS文件 -->
+<link rel="stylesheet" href="{% static 'css/resizable-table.css' %}">
 <script src="{% static 'js/datas_table.js' %}"></script>
+<script src="{% static 'js/resizable-table.js' %}"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
 <div class="peek">
     <h3>领用信息</h3>
     {% if not checkouts_edit_btns %}
@@ -60,15 +72,15 @@
                     <!-- <td class="text-center align-middle"> {{ checkout.id }} </td> -->
                     <td class="align-middle"> {{ checkout.checkout_no }} </td>
                     <td class="align-middle text-nowrap"> {{ checkout.checkout_date|date:"Y/m/d" }} </td>
-                    <td class="align-middle text-nowrap"> {{ checkout.PartNo }} </td>
+                    <td class="align-middle"> {{ checkout.PartNo }} </td>
                     <td class="align-middle"> {{ checkout.checkout_qty }} </td>
-                    <td class="align-middle" style="font-size: small;"> {% if checkout.sn_file %}<a href="{{ checkout.sn_file.url }}"
+                    <td class="align-middle content-ellipsis"> {% if checkout.sn_file %}<a href="{{ checkout.sn_file.url }}"
                           target="_blank">{{checkout.sn_file.name|basename}}</a>{% else %}{{ checkout.SN|escape|linebreaksbr }}{% endif %} </td>
                     <td class="align-middle"> {{ checkout.DC }} </td>
                     <td class="align-middle"> {{ checkout.REV }} </td>
                     <td class="align-middle text-nowrap"> {{ checkout.Work_Order }} </td>
                     <td class="align-middle"> {{ checkout.get_checkout_status_display }} </td>
-                    <td class="align-middle" style="font-size: small;"> {{ checkout.Remarks }} </td>
+                    <td class="align-middle content-ellipsis"> {{ checkout.Remarks }} </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -96,6 +108,11 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        // 初始化表格列可拖拽调整宽度
+        $("#datas_table").resizableTable();
+    });
+    
     $(document).on("contextmenu", "#datas_table tbody tr", function (event) {
         event.preventDefault();
 

@@ -13,9 +13,19 @@
         min-width: 120px;
         z-index: 1;
     }
+    
+    /* 添加长内容处理样式 */
+    .content-ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
 </style>
-<!-- <link rel="stylesheet" href="{% static 'css/schedules.css' %}" /> -->
+<!-- 引入新的CSS文件 -->
+<link rel="stylesheet" href="{% static 'css/resizable-table.css' %}">
 <script src="{% static 'js/datas_table.js' %}"></script>
+<script src="{% static 'js/resizable-table.js' %}"></script>
 <div class="peek">
     <h3>排程管理</h3>
     {% if not schedules_edit_btns %}
@@ -59,22 +69,22 @@
             <tbody>
                 {% for schedule in object_list %}
                 <tr data-schedule-id="{{ schedule.id }}">
-                    <td> {{ schedule.JobNo }} </td>
+                    <td class="content-ellipsis"> {{ schedule.JobNo }} </td>
                     <td> {{ schedule.get_QRT_display }} </td>
                     <td> {{ schedule.Product.product_type }} </td>
                     <td> {{ schedule.Customer.cust_name }} </td>
-                    <td> {{ schedule.PartNo }} </td>
+                    <td class="content-ellipsis"> {{ schedule.PartNo }} </td>
                     <td> {{ schedule.get_Stage_display }} </td>
-                    <td> {{ schedule.TestItem }} </td>
+                    <td class="content-ellipsis"> {{ schedule.TestItem }} </td>
                     <td> {{ schedule.SampleSize }} </td>
                     <td> {{ schedule.TestPeriod }} </td>
-                    <td> {{ schedule.Owner }} </td>
+                    <td class="content-ellipsis"> {{ schedule.Owner }} </td>
                     <td> {{ schedule.StartDate|date:"Y/m/d" }} </td>
                     <td> {{ schedule.EndDate|date:"Y/m/d" }} </td>
                     <td> {{ schedule.get_Status_display }} </td>
                     <td> {{ schedule.get_Upload_Elab_display }} </td>
-                    <td> {{ schedule.Work_Order }} </td>
-                    <td> {{ schedule.Remark }} </td>
+                    <td class="content-ellipsis"> {{ schedule.Work_Order }} </td>
+                    <td class="content-ellipsis"> {{ schedule.Remark }} </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -100,6 +110,11 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        // 初始化表格列可拖拽调整宽度
+        $("#datas_table").resizableTable();
+    });
+    
     $(document).on("contextmenu", "#datas_table tbody tr", function (event) {
         event.preventDefault();
 

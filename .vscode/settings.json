@@ -11,5 +11,9 @@
         "django-html": "html"
     },
     "html.format.templating": true,
-    "svg.preview.background": "editor"
+    "svg.preview.background": "editor",
+    "livecode.pythonPath": "c:\\Users\\22400616\\AppData\\Local\\miniconda3\\envs\\django\\python.exe",
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "python-envs.pythonProjects": []
 }
