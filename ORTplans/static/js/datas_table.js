@@ -1,3 +1,4 @@
+/* global $ */
 
 function hideMenu() {
     // 隐藏自定义右键菜单
@@ -19,7 +20,7 @@ $(document).on("click", function () {
     hideMenu();
 });
 
-$(document).on("click", "#delete_data",function (event) {
+$(document).on("click", "#delete_data", function (event) {
     hideMenu();
     if (!confirm("确认删除吗？")) {
         event.preventDefault();

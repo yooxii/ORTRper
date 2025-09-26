@@ -1,11 +1,9 @@
 
 // 获取年月日和星期几
 let date = new Date();
-Y = date.getFullYear();
-M = date.getMonth();
-W = date.getDay();
-D = date.getDate();
-isSelect = true;    //true为选择了月，false为选择了年（添加文本阴影）
+let Y = date.getFullYear();
+let M = date.getMonth();
+let isSelect = true;    //true为选择了月，false为选择了年（添加文本阴影）
 
 // 更新当前年
 let yearNow = document.getElementById("year");
